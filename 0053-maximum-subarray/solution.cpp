@@ -3,26 +3,27 @@ public:
     int maxSubArray(vector<int>& nums) 
     {
         int sum = 0;
-        int max_sum = 0;
-        int max = nums[0];
+        for(auto n: nums)
+            sum += n;
+        
+        int maxSum = INT_MIN;
+        int tempSum = 0;
+        
         for(int i = 0; i < nums.size(); i++)
-        {   
-            sum += nums[i];
-            if(sum < 0)
-                sum = 0;
-            if(sum > max_sum)
-                max_sum = sum;
-        }
-        if(max_sum == 0)
         {
-            for(int i = 0; i < nums.size(); i++)
+            
+            tempSum += nums[i];
+            if(maxSum < tempSum)
             {
-                if(max < nums[i])
-                    max = nums[i];
+                maxSum = tempSum;
             }
-            max_sum = max;
+            if(tempSum < 0)
+            {
+                tempSum = 0;
+            }
         }
         
-        return max_sum;
+        return maxSum;
+        
     }
 };
