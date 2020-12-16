@@ -1,23 +1,34 @@
 class Solution {
-public:
-    int findNumbers(vector<int>& nums)
+private:
+    int findNumDigits(const int& N)
     {
-        int count = 0;
-        
-        for(int i = 0; i < nums.size(); i++)
+        if(N == 0)
         {
-            int digit = 0;
-            int temp = nums[i];
-            while(temp != 0)
-            {
-                temp /= 10;
-                digit ++;
-            }
-            
-            if(digit%2 == 0)
-                count ++;
+            return 1;
         }
-        return count;
         
+        int numDigits = 0;
+        int num = N;
+        while(num != 0)
+        {
+            num /= 10;
+            numDigits++;
+        }
+        
+        return numDigits;
+    }
+public:
+    int findNumbers(vector<int>& nums) {
+        int result = 0;
+        for(auto & num: nums)
+        {
+            int numDigits = findNumDigits(num);
+            
+            if(numDigits%2 == 0){
+                // cout<<num<<endl;
+                result ++;
+            }
+        }
+        return result;
     }
 };
