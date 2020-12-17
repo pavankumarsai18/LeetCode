@@ -1,28 +1,51 @@
 class Solution {
-public:
-    int removeElement(vector<int>& nums, int val) 
+private:
+    void printArr(vector<int>& nums)
     {
-        int num_repeated = 0;
-        for(int i = 0; i < nums.size(); i++)
+        for(auto & n: nums)
+            cout<<n<<" ";
+        cout<<endl;
+    }
+public:
+    int removeElement(vector<int>& nums, int val) {
+
+        int result = 0;
+        int endIndex = nums.size() - 1;
+        int curIndex = 0;
+ 
+        for(; curIndex <= endIndex; curIndex++)
         {
-            // cout<<"i "<<i<<endl;
-            if(nums[i] == val)
+            while(endIndex >= 0 && nums[endIndex] == val)
             {
-                num_repeated++;
+                result--;
+                endIndex--;    
             }
-            else if(i != 0)
+            if(endIndex < 0)
             {
-                int j = i;
-                while(j >= 1 && nums[j - 1] == val)
-                {
-                    // cout<<j<<" j"<<endl;
-                    j--;
-                }
-                swap(nums[j], nums[i]);
+                break;
             }
+            
+            if(nums[curIndex] == val)
+            {
+                result --;
+                swap(nums[curIndex], nums[endIndex]);
+                endIndex--;
+            }
+            while(endIndex >= 0 && nums[endIndex] == val)
+            {
+                result--;
+                endIndex--;    
+            }
+            if(endIndex < 0)
+            {
+                break;
+            }
+            // cout<<"curIndex "<<curIndex<<endl;
+            // cout<<"endIndex "<<endIndex<<endl;
+            // printArr(nums);
         }
-        return nums.size() - num_repeated;
-        
+        result += nums.size();
+        return result;
         
     }
 };
