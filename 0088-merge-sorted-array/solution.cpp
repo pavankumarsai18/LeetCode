@@ -1,46 +1,48 @@
 class Solution {
-public:
-    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) 
+private:
+    void printArr(vector<int>& nums)
     {
-        int ind_1 = 0;
-        int ind_2 = 0;
-        
-        int min_len = (m < n)? m : n;
-        vector<int> result;
-        
-        for(int i = 0; i < m + n; i++)
+        for(auto & n: nums)
         {
-            if(ind_1 < m && ind_2 < n && nums1[ind_1] < nums2[ind_2])
+            cout<<n<<" ";
+        }
+    }
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int indexA = m - 1;
+        int indexB = n - 1;
+        
+        int index = nums1.size() - 1;
+        
+        while(indexA >= 0 && indexB >= 0)
+        {
+            // cout<<"index "<<index<<endl;
+            // cout<<"indexA "<<indexA<<endl;
+            // cout<<"indexB "<<indexB<<endl;
+            
+            if(nums1[indexA] > nums2[indexB])
             {
-                result.push_back(nums1[ind_1]);
-                ind_1++;
+                nums1[index] = nums1[indexA];
+                index--;
+                indexA--;
             }
-            else if(ind_1 < m && ind_2 < n)
+            else
             {
-                result.push_back(nums2[ind_2]);
-                ind_2++;
+                nums1[index] = nums2[indexB];
+                index--;
+                indexB--;
             }
-            else 
-            {
-                if(ind_1 == m && ind_2 != n)
-                {
-                    for(int j = ind_2; j < n; j++)
-                    {
-                        result.push_back(nums2[j]);
-                    }
-                    i = m + n;
-                }
-                else if(ind_1 != m && ind_2 == n)
-                {
-                    for(int j = ind_1; j < m; j++)
-                    {
-                        result.push_back(nums1[j]);
-                    }
-                    i = m + n;
-                }
-            }
+            // printArr(nums1);
+            // cout<<endl;
         }
         
-        nums1 = std::move(result);
+        while(indexB >= 0)
+        {
+            nums1[index] = nums2[indexB];
+            index--;
+            indexB--;
+        }
+        
+        
     }
 };
