@@ -1,26 +1,38 @@
 class Solution {
+private:
+    int squareDigits(int n)
+    {
+        int result = 0;
+        
+        while(n > 0)
+        {
+            result += (n%10)*(n%10);
+            n/=10;
+        }
+        return result;
+    }
 public:
     bool isHappy(int n) {
         
-        unordered_set<int> S;
-        while(n != 1)
-        {
-            auto itr = S.find(n);
-            if(itr == S.end())
-                S.insert(n);
-            else
-                return false;
-            int temp = n;
-            int res = 0;
-            while(temp != 0)
-            {
-                int digit = temp%10;
-                res += digit*digit;
-                temp /= 10;
-            }
-            n = res;
-        }
-        return true;
+        unordered_set<int> numbers;
         
+        int squareSum = -1;
+        
+        while(squareSum != 1)
+        {
+            if(numbers.find(n) != numbers.end())
+            {
+                return false;
+            }
+            if(n == 1)
+            {
+                return true;
+            }
+            numbers.insert(n);
+            n = squareDigits(n);
+            
+        }
+        
+        return false;
     }
 };
