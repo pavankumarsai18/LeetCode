@@ -1,22 +1,30 @@
 class Solution {
 public:
-    
-    
-    int tribonacci(int n) 
-    {
-        vector<int> arr(38, -1);
-        arr[0] = 0;
-        arr[1] = 1;
-        arr[2] = 1;
-        if(n <= 2)
-        { 
-            return arr[n];
-        }
-        for(int i = 3; i <= n; i++)
+    int tribonacci(int n) {
+
+        if(n == 0)
+            return 0;
+        else if(n == 1)
+            return 1;
+        else if(n == 2)
+            return 1;
+        else
         {
-            arr[i] = arr[i-1] + arr[i-2] + arr[i-3];
+            int a, b, c;
+            a = 0;
+            b = c = 1;
+            
+            for(int i = 0; i < n-2; i++){
+                int temp_a, temp_b;
+                temp_a = a;
+                a = b;
+                temp_b = b;
+                b = c;            
+                c = temp_a + temp_b + c;            
+            }
+            
+            return c;
         }
-        return arr[n];
         
     }
 };
