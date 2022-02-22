@@ -1,13 +1,16 @@
 class Solution {
 public:
-    int titleToNumber(string s) {
+    int titleToNumber(string columnTitle) 
+    {
         int result = 0;
         
-        for(int i = 0; i < s.length(); i++)
+        for(int i = 0; i < columnTitle.size() - 1; i++)
         {
-            result += pow(26, s.length() - i - 1)*(static_cast<int>(s[i]) - 64);
+            result += (columnTitle[i]-64);
+            result <<= 1;
+            result *= 13;
         }
-        
-        return result;
+        result += (columnTitle[columnTitle.size() - 1]-64);
+        return result;        
     }
 };
