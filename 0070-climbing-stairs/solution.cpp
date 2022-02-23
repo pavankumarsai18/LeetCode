@@ -1,25 +1,21 @@
 class Solution {
+
 public:
-    int climbStairs(int n) {
+    unordered_map<int, int> memo;
+    int climbStairs(int n) 
+    {
+        auto itr = memo.find(n);
+        if(itr != memo.end())
+            return memo[n];
         
-        if(n == 0)
-            return 0;
-        else if(n == 1)
-            return 1;
-        else if(n == 2)
-            return 2;
-        
-        int oneStep = 1;
-        int twoStep = 2;
-        
-        for(int i = 0; i < n - 2; i++)
+        if(n <= 2 && n >= 0)
         {
-            int temp = oneStep;
-            oneStep = twoStep;
-            twoStep = twoStep + temp;
-            
+            memo[n] = n;
+            return n;
         }
-        return twoStep;
+        
+        memo[n] = climbStairs(n-1) + climbStairs(n-2);
+        return memo[n];
         
     }
 };
