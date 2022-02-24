@@ -1,64 +1,81 @@
 class Solution {
 public:
+    bool isValid(const int& r, const int & c, const vector<vector<int>>& grid)
+    {
+        return ((r>= 0 && r < grid.size()) && (c>= 0 && c< grid[0].size()));         
+    }
+    
     int islandPerimeter(vector<vector<int>>& grid) 
     {
+        
         int result = 0;
+        
+        queue<pair<int, int>> q;
         for(int i = 0; i < grid.size(); i++)
         {
             for(int j = 0; j < grid[i].size(); j++)
             {
-                
                 if(grid[i][j] == 1)
                 {
-                    bool up,left,right,down;
-                    up = down = left  = right = true;
-                    int temp = 4;
-                    if(j == 0 || j == grid[i].size() - 1)
-                    {
-                        if(j == 0)
-                        {
-                            left = false;
-                        }
-                        if(j == grid[i].size() - 1)
-                        {
-                            right = false;
-                        }
-                    }
-                    
-                    if(i == 0 || i == grid.size() - 1)
-                    {
-                        if(i == 0)
-                            up = false;
-                        if(i == grid.size() - 1)
-                            down = false;
-                    }
-                    
-                    if(up)
-                    {
-                        if(grid[i - 1][j] == 1)
-                            temp--;
-                    }
-                    if(down)
-                    {
-                        if(grid[i+1][j] == 1)
-                            temp--;
-                    }
-                    if(left)
-                    {
-                        if(grid[i][j - 1] == 1)
-                            temp --;
-                    }
-                    if(right)
-                    {
-                        if(grid[i][j+1] == 1)
-                            temp--;
-                    }
-                    result += temp;
+                    pair<int, int> index; index.first = i, index.second=j;
+                    q.push(index);
+                    break;
                 }
+            }
+        }
+        
+        vector<vector<bool>> visited(grid.size(), vector<bool>(grid[0].size(), false));
+        
+        if(q.size() == 0)
+            return result;
+        
+        
+        while(q.size())
+        {
+            pair<int, int> index = q.front();q.pop();
+            
+            if(visited[index.first][index.second] == false)
+            {
+                int perimeter = 4;
+                visited[index.first][index.second] = true;;
                 
-               
+                int row = index.first;
+                int col = index.second;
+                
+                // right
+                if(isValid(row+1, col, grid) && grid[row+1][col] == 1)
+                {
+                    pair<int, int> index; index.first = row+1, index.second=col;
+                    q.push(index);
+                    perimeter -= 1;
+                }
+                // left
+                if(isValid(row-1, col, grid) && grid[row-1][col] == 1)
+                {
+                    pair<int, int> index; index.first = row-1, index.second=col;
+                    q.push(index);
+                    perimeter -= 1;
+                }
+                //up
+                if(isValid(row, col+1, grid) && grid[row][col+1] == 1)
+                {
+                    pair<int, int> index; index.first = row, index.second=col+1;
+                    q.push(index);
+                    perimeter -= 1;
+                }
+                // down
+                if(isValid(row, col-1, grid) && grid[row][col-1] == 1)
+                {
+                    pair<int, int> index; index.first = row, index.second=col-1;
+                    q.push(index);
+                    perimeter -= 1;
+                }
+                result += perimeter;
             }
         }
         return result;
+        
+        
+        
     }
 };
