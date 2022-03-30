@@ -1,71 +1,49 @@
 class Solution {
-private:
-    bool binarySearch(vector<int>& nums, int target)
-    {
-        if(nums.size() == 0)
-            return false;
-        
-        if(nums[0] == target || nums[nums.size() - 1] == target)
-            return true;
-        
-        int hi, lo;
-        
-        lo = 0;
-        hi = nums.size() - 1;
-        
-        while(hi >= lo)
-        {
-            int mid = (hi + lo)/2;
-            
-            if(nums[mid] == target)
-            {
-                return true;
-            }
-            else
-            {
-                if(nums[mid] > target)
-                {
-                    hi = mid - 1;
-                }
-                else if(nums[mid] < target)
-                {
-                    lo = mid + 1;
-                }
-            }
-        }
-        
-        return false;
-    }
-    
 public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) 
     {
-        int n = matrix[0].size();
         
+        int loRow , hiRow;
+        loRow = 0;
+        hiRow = matrix.size() - 1;
         
-        int hi = matrix.size()*n - 1;
-        int lo = 0;
-        
-        
-        while(hi >= lo)
-        {   
-            int mid = (hi + lo)/2;
+        while(hiRow >= loRow)
+        {
+            int mid = (loRow + hiRow)/2;
             
-            if(matrix[mid/n][mid%n] == target)
+            if(target > matrix[mid][0] && target > matrix[mid][matrix[0].size() - 1])
             {
-                return true;
+                loRow = mid + 1;
             }
-            else if(matrix[mid/n][mid%n] > target)
+            else if(target < matrix[mid][0])
             {
-                hi = mid - 1;
+                hiRow = mid - 1;
             }
-            else if(matrix[mid/n][mid%n] < target)
+            else
             {
-                lo = mid + 1;
+                int loCol = 0;
+                int hiCol = matrix[mid].size() - 1;
+                
+                while(hiCol >= loCol)
+                {
+                    int midCol = (loCol + hiCol)/2;
+                    int val = matrix[mid][midCol];
+                    if(val > target)
+                    {
+                        hiCol = midCol - 1;
+                    }
+                    else if(val < target)
+                    {
+                        loCol = midCol + 1;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
-            
         }
         return false;
-        
     }
 };
