@@ -2,61 +2,21 @@ class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) 
     {
- 
-        
-        unordered_map<int,int> num_count;
-        for(auto n: nums)
+        unordered_map<int, int> numCount;
+        for(auto & n: nums)
         {
-            auto itr = num_count.find(n);
-            if(itr == num_count.end())
-            {
-                num_count[n] = 1;
-            }
-            else
-            {
-                num_count[n]++;
-            }
+            numCount[n]++;
         }
-        
-        unordered_map<int, vector<int>> count_list;
-        for(auto itr = num_count.begin(); itr != num_count.end(); itr++)
+        priority_queue<pair<int, int>> Q;
+        for(auto item:numCount)
         {
-            auto i = count_list.find(itr->second);
-            if(i == count_list.end())
-            {
-                vector<int> n;
-                n.push_back(itr->first);
-                count_list[(itr->second)] = n;
-            }
-            else
-            {
-                count_list[(itr->second)].push_back(itr->first);
-            }
+            Q.push({item.second, item.first});
         }
- 
-        
-        priority_queue<int> h;
-        for(auto itr = count_list.begin(); itr != count_list.end(); itr++)
-        {
-            h.push(itr->first);
-        }
-    
         vector<int> result;
-        
-        while(result.size() < k)
+        for(int i =0;i<k;i++)
         {
-            int n = h.top();
-            for(auto c: count_list[n])
-            {
-                
-                if(result.size() == k)
-                    break;
-                result.push_back(c);
-            }
-            h.pop();
-            
+            result.push_back(Q.top().second);Q.pop();
         }
-        
         return result;
     }
 };
