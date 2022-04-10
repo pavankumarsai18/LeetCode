@@ -1,67 +1,36 @@
 class Solution {
 public:
-    int calPoints(vector<string>& ops) {
-        stack<int> Points;
+    int calPoints(vector<string>& ops) 
+    {
+        vector<int> operands;
         
-        for(int i = 0; i < ops.size(); i++)
+        for(int i = 0; i < ops.size();i++)
         {
-            
             if(ops[i] == "C")
             {
-                Points.pop();   
-            }
-            else if(ops[i] == "+")
-            {
-                int x = Points.top();
-                Points.pop();
-                int y = Points.top();
-                Points.push(x);
-                Points.push(x+y);
+                operands.pop_back();
             }
             else if(ops[i] == "D")
             {
-                Points.push(2*Points.top());
+                operands.push_back(operands[operands.size() - 1]*2);
+            }
+            else if(ops[i] == "+")
+            {
                 
+                operands.push_back(operands[operands.size()-1] + operands[operands.size()-2]);
             }
-            
             else
-            {   
-                Points.push(string_to_int(ops[i]));
+            {
+                operands.push_back(stoi(ops[i]));
             }
-            //std::cout<<Points.top()<<std::endl;
-        }
-        int sum = 0;
-        while(!Points.empty())
-        {
-            sum += Points.top();
-            Points.pop();
+        
         }
         
-        return sum;
-    }
-    
-    int string_to_int(const string& s)
-    {
         int result = 0;
-        if(s[0] == '-')
+        for(int i = 0; i < operands.size();i++)
         {
-            for(int i = 1; i < s.size(); i++)
-            {
-                result += int(s[i]) - 48;
-                if(i < s.size() - 1)
-                    result *= 10;
-            }
-            return -1*result;
+            result += operands[i];
         }
-        else
-        {
-            for(int i = 0; i < s.size(); i++)
-            {
-                result += int(s[i]) - 48;
-                if(i < s.size() - 1)
-                    result *= 10;
-            }
-            return result;
-        }
+        return result;
     }
 };
