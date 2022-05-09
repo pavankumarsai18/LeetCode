@@ -1,48 +1,38 @@
 class Solution {
-public:
-    bool backspaceCompare(string S, string T) 
+private:
+    stack<char> parseString(const string & s)
     {
-        // if(S.size() != T.size())
-        //     return false;
-        
-        stack<char> s_stack;
-        stack<char> t_stack;
-        
-        for(int i = 0; i < S.size(); i++)
+        stack<char> Stack;
+
+        for(int i = 0; i < s.size(); i++)
         {
-            if(S[i] == '#')
+            if(s[i]== '#' && Stack.size())
             {
-                if(!s_stack.empty())
-                    s_stack.pop();
+                Stack.pop();
             }
-            else
+            else if(s[i] != '#')
             {
-                s_stack.push(S[i]);
-                
+                Stack.push(s[i]);
             }
         }
-        for(int i = 0; i < T.size(); i++)
+        return Stack;
+    }
+public:
+
+    bool backspaceCompare(string s, string t) 
+    {
+        stack<char> sStack = parseString(s);
+        stack<char> tStack = parseString(t);
+    
+        while(sStack.size() && tStack.size())
         {
-            if(T[i] == '#')
-            {
-                if(!t_stack.empty())
-                    t_stack.pop();
-            }
-            else
-                t_stack.push(T[i]);
-        }
-        
-        if(s_stack.size() != t_stack.size())
-            return false;
-        
-        while(!s_stack.empty())
-        {
-            if(s_stack.top() != t_stack.top())
+            if(sStack.top() != tStack.top())
                 return false;
-            s_stack.pop();
-            t_stack.pop();
+            
+            sStack.pop(); tStack.pop();
         }
         
-        return true;
+        return (sStack.size() == 0 && tStack.size() == 0);
+       
     }
 };
