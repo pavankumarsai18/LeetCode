@@ -4,49 +4,44 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
-    int level_order(TreeNode* & n)
+public:
+    int maxDepth(TreeNode* root, int depth)
     {
-        if(n == nullptr)
-            return 0;
-        else
-        {
-            queue<TreeNode*> level;
-            level.push(n);
-            int sum = 0;
-            
-            while(level.size() != 0)
-            {
-                
-                queue<TreeNode*> L;
-                int leaves_sum = 0;
-                while(level.size() != 0)
-                {
-                    TreeNode* node = level.front();
-                    level.pop();
-                    
-                    if(node->left != nullptr)
-                        L.push(node->left);
-                    if(node->right != nullptr)
-                        L.push(node->right);
-                    
-                    if(node->left == nullptr && node->right == nullptr)
-                        leaves_sum += node->val;
-                }
-                level = L;
-                sum = leaves_sum;
-            }
-            
-            return sum;
-        }
+        if(root == nullptr)
+            return depth -1;
+        
+        return max(maxDepth(root->left, depth+1), maxDepth(root->right, depth+1));
     }
     
-public:
+    void preOrderTraversal(TreeNode* node, int depth, const int treeDepth, int & leavesSum)
+    {
+        if(node == nullptr)
+            return;
+        
+        if(depth == treeDepth)
+        {
+            leavesSum += node->val;
+            return;
+        }
+
+        preOrderTraversal(node->left, depth + 1, treeDepth, leavesSum);
+        preOrderTraversal(node->right, depth + 1, treeDepth, leavesSum);
+        
+    }
+    
+    
     int deepestLeavesSum(TreeNode* root) 
     {
-        return level_order(root);    
+        const int treeDepth = maxDepth(root, 0);
+        int leavesSum = 0;
+        preOrderTraversal(root,0 , treeDepth, leavesSum);
+        return leavesSum;
+        
     }
 };
