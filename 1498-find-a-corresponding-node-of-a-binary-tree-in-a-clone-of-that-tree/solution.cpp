@@ -10,33 +10,29 @@
 
 class Solution {
 private:
-    void prefix(TreeNode* original, TreeNode* cloned, TreeNode* target, TreeNode* & result)
+    void preOrderTraversal(TreeNode* original, TreeNode* cloned, int targetVal, TreeNode* & result)
     {
-        if(original == target)
+        if(original == nullptr)
+            return;
+        
+        if(original->val == targetVal)
         {
             result = cloned;
             return;
         }
-        else
-        {
-            if(original != nullptr && cloned != nullptr)
-            {
-                if(original->left != nullptr && cloned->left != nullptr)
-                {
-                    prefix(original->left, cloned->left, target, result);
-                }
-                if(original->right != nullptr && cloned->right != nullptr)
-                {
-                    prefix(original->right, cloned->right, target, result);
-                }
-            }
-        }
+       preOrderTraversal(original->left, cloned->left, targetVal, result);
+       preOrderTraversal(original->right, cloned->right, targetVal, result);
     }
+    
 public:
-    TreeNode* getTargetCopy(TreeNode* original, TreeNode* cloned, TreeNode* target)
+    TreeNode* getTargetCopy(TreeNode* original, TreeNode* cloned, TreeNode* target) 
     {
-        TreeNode* result;
-        prefix(original, cloned, target, result);
+        if(original == cloned)
+            return cloned;
+        
+        TreeNode* result = nullptr;
+        preOrderTraversal(original, cloned, target->val, result);
         return result;
+        
     }
 };
