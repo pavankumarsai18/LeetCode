@@ -1,17 +1,15 @@
 class Solution {
 public:
-    int hammingWeight(uint32_t n) {
-        
-        auto temp = n;
-        int result = 0;
-        
-        while(temp != 0)
+    int hammingWeight(uint32_t n) 
+    {
+        int numOnes = 0;
+        while(n)
         {
-            result += temp&1;
-            temp >>= 1;
+            if(n&1)
+                numOnes++;
+            n >>= 1;
         }
-        
-        return result;
+        return numOnes;
         
     }
 };
