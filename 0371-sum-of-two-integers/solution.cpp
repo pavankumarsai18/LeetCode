@@ -1,9 +1,12 @@
 class Solution {
 public:
-    int getSum(int a, int b) {
+    int getSum(int a, int b) 
+    {
         int sum = 0;
         unsigned int carry = 0;
-        for (int i = 0; i < 32; i++) {
+        
+        for (int i = 0; i < 32; i++)
+        {
             int A = a & (1 << i);
             int B = b & (1 << i);
             sum |= A ^ B ^ carry;
@@ -11,6 +14,6 @@ public:
         }
         
         return sum;
-        
+    
     }
 };
