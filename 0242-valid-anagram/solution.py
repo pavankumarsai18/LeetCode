@@ -5,23 +5,24 @@ class Solution(object):
         :type t: str
         :rtype: bool
         """
-        count = {}
-        for letter in s:
-            if letter not in count:
-                count[letter] = 1
-            else:
-                count[letter] += 1
-        #print(count)
-        for letter in t:
-            if letter in count:
-                if count[letter] > 0:
-                    count[letter] -= 1
-                else:
-                    return False
-            else:
+        if len(s) != len(t):
+            return False
+        
+        n = len(s)
+        
+        sChars = defaultdict(int)
+        
+        for ch in s:
+            sChars[ch] += 1
+        for ch in t:
+            if ch not in sChars:
                 return False
-        for key in count:
-            if count[key] != 0:
+            elif sChars[ch] <= 0:
+                return False
+            sChars[ch] -= 1
+        
+        for ch, count in sChars.items():
+            if count != 0:
                 return False
         return True
-                
+        
