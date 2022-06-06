@@ -3,84 +3,37 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        if(l1 == 0)
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) 
+    {
+        ListNode* preHead = new ListNode(-1);
+        ListNode* prev = preHead;
+        
+        while(l1 != nullptr && l2 != nullptr)
         {
-            return l2;
-        }
-        else if(l2 == 0)
-        {
-            return l1;
-        }
-        
-        ListNode *a = l1;
-        ListNode *b = l2;
-        
-        
-        //make a to have the smallest element
-        if(a->val > b->val)
-        {
-            ListNode* temp = a;
-            a = b;
-            b = temp;
-        }
-        
-        ListNode *result = a;
-        
-        //run the loop till one of the pointerreaches the tail of the list
-        
-        while(a != 0 && b!= 0)
-        {
-            if(a->next != 0)
+            if(l1->val <= l2->val)
             {
-                if(a->val <= b->val && b->val <= a->next->val)
-                {
-
-                    if(b->next != 0)
-                    {
-                        ListNode*temp = b->next;
-                        b->next = a->next;
-                        a->next = b;
-                        a = a->next;
-                        b = temp; 
-                    }
-
-                    else
-                    {
-                        b->next = a->next;
-                        a->next = b;
-                        break;
-                    }
-
-                }
-
-                else
-                {
-                    a = a->next;
-                }
+                prev->next = l1;
+                l1 = l1->next;
             }
-            
             else
             {
-                if(a->val <= b->val)
-                {
-                    a->next = b;
-                    break;
-                }
-                else
-                {
-                    break;
-                }
-                
+                prev->next = l2;
+                l2 = l2->next;
             }
-
-            
+            prev = prev->next;
         }
-        return result;
+        
+        prev->next = (l1 == nullptr)? l2:l1;
+        
+        prev = preHead->next;
+        preHead->next = nullptr;
+        return prev;
     }
 };
