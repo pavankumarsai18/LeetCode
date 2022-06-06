@@ -1,22 +1,27 @@
 class Solution {
 public:
-    int findDuplicate(vector<int>& nums) {
-        int t = nums[0];
-        int h = nums[0];
+    int findDuplicate(vector<int>& nums) 
+    {   
         
-        do{
-            t = nums[t];
-            h = nums[nums[h]];
-        }while(t != h);
+        int tortoise, rabbit;
+        tortoise = nums[0];
+        rabbit   = nums[0];
         
-        
-        t = nums[0];
-        while(t != h)
+        do
         {
-            t = nums[t];
-            h = nums[h];
+            tortoise = nums[tortoise];
+            rabbit   = nums[nums[rabbit]];
+            
+        }while(tortoise != rabbit);
+
+        tortoise = nums[0];
+        
+        while(tortoise != rabbit)
+        {
+            tortoise = nums[tortoise];
+            rabbit   = nums[rabbit];
         }
         
-        return h;
+        return tortoise;
     }
 };
