@@ -1,146 +1,54 @@
 class Solution {
-    bool check_subsq(vector<vector<char>>& board, int sq)
-    {
-        // cout<<"Checking Squares\n";   
-        // 1 --> (0 - 2) i (0 - 2) j
-        // 2 --> (0 - 2) i (3 - 5) j
-        // 3 --> (0 - 2) i (6 - 8) j
-        
-        // 4 --> (3 - 5) i (0 - 2) j
-        // 5 --> (3 - 5) i (3 - 5) j
-        // 6 --> (3 - 5) i (6 - 8) j
-        
-        // 7 --> (6 - 8) i (0 - 2) j
-        // 8 --> (6 - 8) i (3 - 5) j
-        // 9 --> (6 - 8) i (6 - 8) j
-        
-        int lo_r  = 0;
-        if(sq <= 3)
-            lo_r = 0;
-        else if(sq <= 6)
-            lo_r = 3;
-        else
-            lo_r = 6;
-        
-        int hi_r = lo_r + 2;
-        
-        int lo_c =  0;
-        
-        if(sq%3 == 0)
-            lo_c = 6;
-        else if(sq%3 == 1)
-            lo_c = 0;
-        else
-            lo_c = 3;
-        
-        
-        int hi_c = lo_c + 2;
-        
-        
-        vector<bool> found;
-        for(int i = 0; i < 9; i++)
-        {
-            found.push_back(false);
-        }
-        // cout<<lo_r<<" r:hr "<<hi_r<<endl;
-        // cout<<lo_c<<" c:hc "<<hi_c<<endl;
-        for(int i = lo_r; i <= hi_r; i++)
-        {
-            for(int j = lo_c; j <= hi_c; j++)
-            {
-                // cout<<i<<" "<<j<<endl;
-                if(board[i][j] != '.')
-                {
-                    cout<<static_cast<int>(board[i][j]) - 49<<endl;
-                    if(found[ static_cast<int>(board[i][j]) - 49])
-                        return false;
-                    found[static_cast<int>(board[i][j]) - 49] = true;
-                }
-            }
-        }
-        return true;
-        
-        
-    }
-    bool check_row(vector<vector<char>>& board)
-    {
-        // cout<<"Checking rows\n";
-        vector<bool> found;
-        for(int i = 0; i < 9; i++)
-        {
-            found.push_back(false);
-        }
-        
-        for(int i = 0; i < board.size(); i++)
-        {
-            for(int j = 0; j < board[i].size(); j++)
-            {
-                
-                if(board[i][j] != '.')
-                {
-                    // cout<<static_cast<int>(board[i][j]) - 49<<endl;
-                    if(found[static_cast<int>(board[i][j]) - 49])
-                        return false;
-                    found[static_cast<int>(board[i][j]) - 49] = true;
-                }
-            }
-            for(int k = 0; k < 9; k++)
-            {
-                found[k] = false;
-            }
-        }
-        return true;
-        
-    }
-    bool check_col(vector<vector<char>>& board)
-    {
-        // cout<<"Checking columns\n";
-        vector<bool> found;
-        for(int i = 0; i < 9; i++)
-        {
-            found.push_back(false);
-        }
-        
-        for(int j = 0; j < board[0].size(); j++)
-        {
-            for(int i = 0; i < board.size(); i++)
-            {
-                
-                if(board[i][j] != '.')
-                {
-                    // cout<<static_cast<int>(board[i][j]) - 49<<endl;
-                    if(found[static_cast<int>(board[i][j]) - 49])
-                        return false;
-                    found[static_cast<int>(board[i][j]) - 49] = true;
-                }
-            }
-            for(int k = 0; k < 9; k++)
-            {
-                found[k] = false;
-            }
-        }
-        return true;
-    }
 public:
+    bool atmostOne(vector<int>& arr)
+    {
+
+        for(auto & item: arr)
+        {
+            if(item  < 1)
+                return false;
+        }
+
+        
+        return true;
+    }
     bool isValidSudoku(vector<vector<char>>& board) 
     {
-        bool col = check_col(board);
-        bool row = check_row(board);
-        if(col && row)
+        
+        vector<int> subBoards(9, 0);
+        vector<int> cols(9, 0);
+        vector<int> rows(9,0);
+        
+        for(int i = 0; i < 9; i++)
         {
-            for(int i = 0; i < board.size(); i++)
+            for(int j = 0; j < 9; j++)
             {
-                // cout<<"Checking "<<i+1<<"square\n";
-                if(check_subsq(board, i+1) == false)
+                int subBoardNumber = (j/3) + (i/3)*3;
+                
+                if(board[i][j] == '.')
+                    continue;
+                
+                int val = 1 << (board[i][j] - '1');
+                
+                if((rows[i] & val) > 0)
                 {
                     return false;
                 }
+                rows[i] |= val;
+                
+                if((cols[j] & val) > 0)
+                    return false;
+                cols[j] |= val;
+                
+                if((subBoards[subBoardNumber] & val) > 0)
+                    return false;
+                subBoards[subBoardNumber] |= val;
             }
-            return true;
         }
-        else
-        {
-            return false;
-        }
+        
+        return true;
+        
+        
+        
     }
 };
