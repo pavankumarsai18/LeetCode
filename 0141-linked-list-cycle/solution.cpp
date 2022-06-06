@@ -8,25 +8,33 @@
  */
 class Solution {
 public:
-    bool hasCycle(ListNode *head) {
+    bool hasCycle(ListNode *head) 
+    {
+        ListNode* rabbit   = head;
+        ListNode* tortoise = head;
         
-        //make a map 
-        map<ListNode*, int> p_count;
-        
-        //vector<ListNode*>p;
-        while(head != 0)
+        while(rabbit != nullptr && tortoise != nullptr)
         {
-            if(p_count.find(head) != p_count.end())
+            
+            
+            rabbit = rabbit->next;
+            if(rabbit == nullptr)
             {
-                p_count[head] += 1;
-                if(p_count[head] > 1)
-                    return true;
+                return false;
             }
-            else
-                p_count[head] = 0;
-            head = head->next;
+            
+            rabbit = rabbit->next;
+            tortoise = tortoise->next;
+            if(rabbit == tortoise)
+            {
+                return true;
+            }
         }
+        
         return false;
+        
+        
+        
         
     }
 };
