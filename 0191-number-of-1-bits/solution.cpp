@@ -5,11 +5,9 @@ public:
         int numOnes = 0;
         while(n)
         {
-            if(n&1)
-                numOnes++;
-            n >>= 1;
+            (n&1)?numOnes++:(0);
+            n>>=1;
         }
         return numOnes;
-        
     }
 };
