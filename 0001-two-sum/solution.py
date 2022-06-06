@@ -1,10 +1,30 @@
-class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
-        index_num = {}
+class Solution(object):
+    def twoSum(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: List[int]
+        """
+        
+        numCount = defaultdict(list)
         
         for i in range(len(nums)):
-            if target - nums[i] in  index_num:
-                return [index_num[target - nums[i]], i]
-            index_num[nums[i]] = i
+            numCount[nums[i]].append(i)
+            
         
+        result = []
+        for num in numCount.keys():
+            index1 = numCount[num].pop()
+            
+            second_num = target - num
+            
+            if len(numCount[second_num]) > 0:
+                index2 = numCount[second_num].pop()
+                result.append(index1)
+                result.append(index2)
+                return result
+            
+            numCount[num].append(index1)
+            
+        return result
                 
