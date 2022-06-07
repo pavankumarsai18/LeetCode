@@ -25,47 +25,54 @@ public:
     {
         if(node == nullptr)
             return nullptr;
-            
-        // TWO pass algorithm
-        unordered_map<Node*, Node*> cloneMap;
         
+        unordered_map<Node*, Node*> oldNode_newNode_map;
         unordered_set<Node*> visited;
-        queue<Node*> q;
-        q.push(node);
         
-        while(q.size())
+        queue<Node*> Q;
+        Q.push(node);
+        visited.insert(node);
+        while(Q.size() > 0)
         {
-            Node* n = q.front();
-            q.pop();
-            auto found = visited.find(n);
-            if(found == visited.end())
+            Node* node = Q.front(); Q.pop();
+            Node* newNode = new Node(node->val);
+            
+            oldNode_newNode_map[node] = newNode;
+            
+            for(Node* neighbor: node->neighbors)
             {
-                visited.insert(n);
-                Node* clone = new Node(n->val);
-                cloneMap[n] = clone;
-                
-                for(int i = 0; i < n->neighbors.size(); i++)
+                if(visited.find(neighbor) == visited.end())
                 {
-                    q.push(n->neighbors[i]);
+                    Q.push(neighbor);
+                    visited.insert(neighbor);
                 }
-            }
-            
-        }
+            }   
+        }        
         
-        Node* result = cloneMap[node];
+        visited.clear();
         
-        for(auto itr = cloneMap.begin(); itr != cloneMap.end(); itr++)
+        Q.push(node);
+        visited.insert(node);
+        
+        while(Q.size() > 0)
         {
-            Node* clonedNode = itr->second;
-            Node* node = itr->first;
+            Node* node = Q.front(); Q.pop();
             
-            clonedNode->neighbors = vector<Node*>();
-            for(int i = 0; i < node->neighbors.size();)
+            Node* new_node = oldNode_newNode_map[node];
+            
+            for(Node* neighbor: node->neighbors)
             {
-                clonedNode->neighbors.push_back(cloneMap[node->neighbors[i++]]);
-            }
+                new_node->neighbors.push_back(oldNode_newNode_map[neighbor]);
+                if(visited.find(neighbor) == visited.end())
+                {
+                    Q.push(neighbor);
+                    visited.insert(neighbor);
+                }
+            }   
         }
-    
-        return result;
+        
+        return oldNode_newNode_map[node];
+        
+        
     }
 };
