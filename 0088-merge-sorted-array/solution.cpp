@@ -1,48 +1,37 @@
 class Solution {
-private:
-    void printArr(vector<int>& nums)
-    {
-        for(auto & n: nums)
-        {
-            cout<<n<<" ";
-        }
-    }
 public:
-    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
-        int indexA = m - 1;
-        int indexB = n - 1;
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) 
+    {
+        int ind2, ind1;
+        ind2 = n - 1;
+        ind1 = m - 1;
         
-        int index = nums1.size() - 1;
-        
-        while(indexA >= 0 && indexB >= 0)
+        int total = n + m;
+        for(int i = 0; i < total && ind1 >= 0 || ind2 >= 0; i++)
         {
-            // cout<<"index "<<index<<endl;
-            // cout<<"indexA "<<indexA<<endl;
-            // cout<<"indexB "<<indexB<<endl;
-            
-            if(nums1[indexA] > nums2[indexB])
+            // cout<<"i "<<i<<" ind1 "<<ind1<<" ind2 "<<ind2<<endl;
+            if(ind1 >= 0 && ind2 < 0)
             {
-                nums1[index] = nums1[indexA];
-                index--;
-                indexA--;
+                nums1[total-i-1] = nums1[ind1--];
+            }
+            else if(ind1 < 0 && ind2 >= 0)
+            {
+                nums1[total-i-1] = nums2[ind2--];
             }
             else
             {
-                nums1[index] = nums2[indexB];
-                index--;
-                indexB--;
+                if(nums2[ind2] > nums1[ind1])
+                {
+                    nums1[total - i - 1] = nums2[ind2--];
+                }
+                else
+                {
+                    nums1[total - i - 1] = nums1[ind1--];
+                }
             }
-            // printArr(nums1);
-            // cout<<endl;
         }
         
-        while(indexB >= 0)
-        {
-            nums1[index] = nums2[indexB];
-            index--;
-            indexB--;
-        }
-        
+        return;
         
     }
 };
