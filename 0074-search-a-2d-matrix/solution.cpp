@@ -2,48 +2,33 @@ class Solution {
 public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) 
     {
+        const int numRows = matrix.size();
+        const int numCols = matrix[0].size();
         
-        int loRow , hiRow;
-        loRow = 0;
-        hiRow = matrix.size() - 1;
+        int lo = 0;
+        int hi = numRows*numCols - 1;
         
-        while(hiRow >= loRow)
+        while(lo <= hi)
         {
-            int mid = (loRow + hiRow)/2;
+            int mid = lo + (hi-lo)/2;
             
-            if(target > matrix[mid][0] && target > matrix[mid][matrix[0].size() - 1])
+            int col = mid%numCols;
+            int row = (mid - col)/numCols;
+            
+            if(matrix[row][col] < target)
             {
-                loRow = mid + 1;
+                lo = mid + 1;
             }
-            else if(target < matrix[mid][0])
+            else if(matrix[row][col] > target)
             {
-                hiRow = mid - 1;
+                hi = mid - 1;
             }
             else
             {
-                int loCol = 0;
-                int hiCol = matrix[mid].size() - 1;
-                
-                while(hiCol >= loCol)
-                {
-                    int midCol = (loCol + hiCol)/2;
-                    int val = matrix[mid][midCol];
-                    if(val > target)
-                    {
-                        hiCol = midCol - 1;
-                    }
-                    else if(val < target)
-                    {
-                        loCol = midCol + 1;
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return true;
             }
         }
         return false;
+        
     }
 };
