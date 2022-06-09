@@ -1,44 +1,39 @@
-class Solution(object):
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        s_len, p_len = len(s), len(p)
+        s_idx = p_idx = 0
+        star_idx = s_tmp_idx = -1
+ 
+        while s_idx < s_len:
+            # If the pattern caracter = string character
+            # or pattern character = '?'
+            if p_idx < p_len and p[p_idx] in ['?', s[s_idx]]:
+                s_idx += 1
+                p_idx += 1
     
-    def isMatch(self, s, p):
-        """
-        :type s: str
-        :type p: str
-        :rtype: bool
-        """       
-        n, m = len(s), len(p)
+            # If pattern character = '*'
+            elif p_idx < p_len and p[p_idx] == '*':
+                # Check the situation
+                # when '*' matches no characters
+                star_idx = p_idx
+                s_tmp_idx = s_idx
+                p_idx += 1
+                              
+            # If pattern character != string character
+            # or pattern is used up
+            # and there was no '*' character in pattern 
+            elif star_idx == -1:
+                return False
+                              
+            # If pattern character != string character
+            # or pattern is used up
+            # and there was '*' character in pattern before
+            else:
+                # Backtrack: check the situation
+                # when '*' matches one more character
+                p_idx = star_idx + 1
+                s_idx = s_tmp_idx + 1
+                s_tmp_idx = s_idx
         
-        new_p = []
-        index = 0
-        isFirst = True
-        while index < m:
-            if p[index] != '*':
-                new_p.append(p[index])
-                index += 1
-            while index < m and p[index] == '*':
-                if isFirst:
-                    new_p.append("*")
-                    isFirst = False
-                index += 1
-            isFirst = True
-            
-        p = "".join(new_p)
-        m = len(p)
-
-        # dp[i][j] checks if the substring s[0:i] matches the re p[0:j]
-        dp = [False]*(m+1)
-        if m and p[0] == '*':
-            dp[1] = True
-        dp[0] = True
-
-        for i in xrange(1, n+1):
-            new_dp = [False]*(m+1)
-            for j in xrange(1, m+1):
-                if p[j-1] == '?' or s[i-1] == p[j-1]:
-                    new_dp[j] = dp[j-1]
-                elif p[j-1] == '*':
-                    new_dp[j] = new_dp[j-1] or dp[j]
-            dp = new_dp
-
-        return dp[m]
-        
+        # The remaining characters in the pattern should all be '*' characters
+        return all(p[i] == '*' for i in range(p_idx, p_len))
