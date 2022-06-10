@@ -4,20 +4,23 @@ class Solution(object):
         :type heights: List[int]
         :rtype: int
         """
+        n = len(heights)
         maxArea = 0
-        stack   = []
+        stack = []
         
-        for i, h in enumerate(heights):
-            start = i
+        for (i, h) in enumerate(heights):
+            curIndex = i
             while stack and stack[-1][1] > h:
                 index, height = stack.pop()
                 maxArea = max(maxArea, height*(i - index))
-                start = index
-            stack.append((start, h))
+                curIndex = index
+
+            stack.append((curIndex, h))
         
-        for i, h in stack:
-            maxArea = max(maxArea, h*(len(heights) - i))
-            
+        while stack:
+            index, height = stack.pop()
+            maxArea = max(maxArea, height*(n - index))
+        
         return maxArea
                 
         
