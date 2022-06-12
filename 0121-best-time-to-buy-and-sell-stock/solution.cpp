@@ -1,36 +1,26 @@
 class Solution {
 public:
-
     int maxProfit(vector<int>& prices) 
     {
-        if(prices.size() == 0)
-            return 0;
-
-        int min = prices[0];
-        int max = prices[0];
-        int result = 0;
+        const int totalDays = prices.size();
         
-        for(int i = 0; i < prices.size(); i++)
+        int maxProfit = 0;
+        int minPrice  = prices[0];
+        
+        for(int day = 1; day < totalDays; day++)
         {
-            if(max < prices[i])
+            int profit = prices[day] - minPrice;
+            if(profit > maxProfit)
             {
-                max = prices[i];
+                maxProfit = profit;
             }
-            if(min > prices[i])
+            if(prices[day] < minPrice)
             {
-                min = prices[i];
-                max = prices[i];
+                minPrice = prices[day];
             }
-            
-            if(result < max - min)
-            {
-                result = max - min;
-            }
-            
         }
         
+        return maxProfit;
         
-        return result;
     }
-    
 };
