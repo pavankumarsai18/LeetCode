@@ -1,69 +1,73 @@
-class Node():
-    def __init__(self, key=-1, value=-1):
+from collections import defaultdict
+
+class LinkedNode:
+    def __init__(self, key=None, val=None):
         self.key = key
-        self.value = value
-        self.prev = None
-        self.next = None
-    def __repr__(self):
-        return str(self.key) + ":"+ str(self.value)
-class LRUCache(object):
+        self.value = val
+        self.next, self.prev = None, None
     
-    def __init__(self, capacity):
-        """
-        :type capacity: int
-        """
+class LRUCache:
+
+    def __init__(self, capacity: int):
         self.capacity = capacity
-        self.cache = dict()
-        self.head = Node(-1,-1)
-        self.tail = Node(-1,-1)
-        self.head.next = self.tail
-        self.tail.prev = self.head
-
-    def addBeforeNode(self, new_node, prev_node):
-        # print("In addBefore")
-        # print("new_node",new_node,"prev", prev_node)
-        prev_node.prev, new_node.prev = new_node, prev_node.prev
-        (new_node.prev).next, new_node.next = new_node, prev_node
+        self.cache    = defaultdict(LinkedNode)
+        
+        self.head, self.tail = LinkedNode(), LinkedNode()
+        self.head.next, self.tail.prev = self.tail, self.head
     
-    def removeNode(self, n):
-        prevNode = n.prev
-        nextNode = n.next
-        prevNode.next, nextNode.prev = nextNode, prevNode
-        return n
+    def printList(self):
+        result = []
+        cur = self.head
+        while cur:
+            result.append(str((cur.key,cur.value)))
+            cur = cur.next
+        print("".join(result))
+        return
         
-    def get(self, key):
-        """
-        :type key: int
-        :rtype: int
-        """
-        if key in self.cache:
-            curNode = self.cache[key]
-            self.removeNode(curNode)
-            self.addBeforeNode(curNode, self.tail)
-            return curNode.value
-            
-        return -1
-            
+    def detach(self, node):
+        prevNode, nextNode = node.prev, node.next
         
-    def put(self, key, value):
-        """
-        :type key: int
-        :type value: int
-        :rtype: None
-        """
-        newNode = Node(key, value)
-        if key in self.cache:
-            node = self.cache[key]
-            self.removeNode(node)
-        else:
-            if len(self.cache) == self.capacity:
-                n = self.removeNode(self.head.next)
-                del self.cache[n.key]
+        node.prev, node.next = None, None
+        
+        prevNode.next = nextNode
+        nextNode.prev = prevNode
+        return
+    
+    def addHead(self, node):
+        headNext = self.head.next
+        node.prev = self.head
+        node.next = headNext
+        
+        headNext.prev = node
+        self.head.next = node
+    
+    def moveHead(self, node):
+        self.detach(node)
+        self.addHead(node)
 
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        self.moveHead(self.cache[key])
+        return self.cache[key].value
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self.cache[key].value = value
+            self.moveHead(self.cache[key])
+            return
+        
+        if len(self.cache) == self.capacity:
+            LRUKey = self.tail.prev.key
+            self.detach(self.cache[LRUKey])
+            del self.cache[LRUKey]
+            
+        newNode = LinkedNode(key, value)
         self.cache[key] = newNode
-        self.addBeforeNode(newNode, self.tail)
+        self.addHead(newNode)
 
-                
+
+
 # Your LRUCache object will be instantiated and called as such:
 # obj = LRUCache(capacity)
 # param_1 = obj.get(key)
