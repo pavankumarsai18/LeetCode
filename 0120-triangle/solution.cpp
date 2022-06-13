@@ -2,25 +2,24 @@ class Solution {
 public:
     int minimumTotal(vector<vector<int>>& triangle) 
     {
-        
         const int n = triangle.size();
-        vector<int> dp(n, 0);
         
-        for(int j = 0; j < n; j++)
-        {
-            dp[j] = triangle[n-1][j];
-        }
+        vector<int>dp(n, 0);
         
-        for(int i = n-2; i >= 0; i--)
+        for(int i = 0; i < n; i++)
+           dp[i] = triangle[n-1][i];
+        
+        for(int row = n-2; row >= 0; row--)
         {
-            for(int j = 0; j <= i; j++)
+            vector<int>newDP(n,0);
+            for(int col = 0; col < row+1; col++)
             {
-                dp[j] = min(dp[j], dp[j+1]) + triangle[i][j];
+                newDP[col] = triangle[row][col] + min(dp[col], dp[col+1]);
             }
-            
+            dp = newDP;
         }
+        
+        
         return dp[0];
-        
-        
     }
 };
