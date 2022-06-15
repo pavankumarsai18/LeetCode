@@ -1,58 +1,63 @@
 class Solution 
 {
 private:
-    vector<vector<int>> edges;
     vector<int> score;
+    vector<vector<int>> adjList;
     
+public:
     int findLongestChain(int word)
     {
         if(score[word] != 0)
             return score[word];
-        score[word] = 1;
-        for(int neighbor: edges[word])
+        
+        int curScore = 1;
+        for(int neighbor: adjList[word])
         {
-            score[word] = max(score[word], findLongestChain(neighbor) + 1);
+            curScore = max(curScore, findLongestChain(neighbor) +1);
         }
+        score[word] = curScore;
         
-        return score[word];
+        return curScore;
     }
-public:
     int longestStrChain(vector<string>& words) 
-    {   
+    {
         const int n = words.size();
-        unordered_map<string, int> word_map;
-        
-        edges.clear();
-        score.clear();
+        unordered_map<string, int> wordIndex;
         
         score = vector<int>(n, 0);
-        edges = vector<vector<int>>(n, vector<int>());
+        adjList = vector<vector<int>>(n, vector<int>());
         
         for(int i = 0; i < n; i++)
         {
-            word_map[words[i]] = i;
+            wordIndex[words[i]] = i;
         }
         
-        for(int i = 0; i <n; i++)
-        {    
-            string s = words[i];
-            for(int j = 0; j < s.size(); j++)
+        
+        for(int i = 0; i < n; i++)
+        {
+            string word = words[i];
+            
+            const int wordLen = words[i].size();
+            
+            for(int removeIndex = 0; removeIndex < wordLen; removeIndex++)
             {
-                string newWord = s.substr(0, j) + s.substr(j+1);
-                auto itr = word_map.find(newWord);
-                if(itr == word_map.end())
-                    continue;
-                
-                edges[i].push_back(word_map[newWord]);
+                string newWord = word.substr(0, removeIndex) + word.substr(removeIndex+1);
+                    
+                auto itr = wordIndex.find(newWord);
+                if(itr != wordIndex.end())
+                {
+                    adjList[i].push_back(itr->second);
+                }
             }
         }
         
         int ans = 0;
         for(int word = 0; word < n; word++)
         {
-            ans = max(ans,findLongestChain(word));
+            ans = max(ans, findLongestChain(word));
         }
         
         return ans;
+        
     }
 };
