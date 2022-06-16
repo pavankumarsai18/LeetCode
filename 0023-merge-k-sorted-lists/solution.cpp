@@ -3,68 +3,91 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
-    ListNode* mergeKLists(vector<ListNode*>& lists) 
+    ListNode* merge(ListNode* list1, ListNode* list2)
     {
-        vector<ListNode*> curr;
-        for(auto x : lists)
-            curr.push_back(x);
+        if(list1 == nullptr && list2 == nullptr)
+            return nullptr;
+        else if(list1 == nullptr)
+            return list2;
+        else if(list2 == nullptr)
+            return list1;
         
+        ListNode* cur1   = list1;
+        ListNode* cur2   = list2;
         ListNode* result = nullptr;
-        ListNode* curr_node = nullptr;
-        int end_reached = 0;
-        while(end_reached != lists.size())
+        ListNode* cur    = nullptr;
+        
+        if(cur1->val < cur2->val)
         {
-            int index = 0;
-            bool count = false;
-
-            for(int i = 0; i < curr.size(); i++)
+            result = cur1;
+            cur    = cur1;
+            cur1 = cur1->next;
+        }
+        else
+        {
+            result = cur2;
+            cur    = cur2;
+            cur2 = cur2->next;
+        }
+        
+        while(cur1 && cur2)
+        {
+            if(cur1->val < cur2->val)
             {
-                if(curr[i] != nullptr && count == false)
-                {
-                    index = i;
-                    count = true;
-                }
-                else if(curr[i] != nullptr)
-                {
-                    if(curr[index]->val > curr[i]->val)
-                    {
-                        index = i;
-                    }
-                }
-
-            }
-            // cout<<curr[index]->val<<" ";
-           
-            // cout<<curr[index]->val<<" ";
-            if(curr[index] == nullptr)
-            {
-                end_reached ++;
+                cur->next = cur1;
+                cur1 = cur1->next;
             }
             else
             {
-                if(result == nullptr)
-                {
-                    result = new ListNode(curr[index]->val);
-                    curr_node = result;
-                }
-                else
-                {
-                    auto temp =  new ListNode(curr[index]->val);
-                    curr_node->next = temp;
-                    curr_node = curr_node->next;
-                }
-                curr[index] =  curr[index]->next;
+                cur->next = cur2;
+                cur2 = cur2->next;
             }
-             
+            cur = cur->next;
         }
-        return result;
         
-        
-     }
+        ListNode* head = (cur1 != nullptr)? cur1: cur2;
+        cur->next = head;
     
+        return result;
+    }
+    
+    ListNode* divideAndMerge(vector<ListNode*>& lists, int start, int end)
+    {
+        if(start > end)
+        {
+            return nullptr;
+        }
+        
+        if(start == end)
+        {
+            return lists[start];
+        }
+        else if(end == start + 1)
+        {
+            return merge(lists[start], lists[end]);
+        }
+        
+        int mid =  (start + end)/2;
+        ListNode* l1 = divideAndMerge(lists, start, mid);
+        ListNode* l2 = divideAndMerge(lists, mid+1, end);
+        
+        return merge(l1, l2);
+    
+    }
+    
+    ListNode* mergeKLists(vector<ListNode*>& lists) 
+    {
+        const int n = lists.size();
+        int start = 0;
+        int end   = n-1;
+        return divideAndMerge(lists, start, end);
+        
+    }
 };
