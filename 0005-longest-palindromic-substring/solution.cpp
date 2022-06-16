@@ -1,6 +1,6 @@
 class Solution {
 private:
-    void expandAroundCenter(string & s, int mid1, int mid2,  int & L, int & R)
+    void expandAroundCenter(string & s, int mid1, int mid2,  int & L, int & R, int & curMax)
     {
         int left, right;
         left = mid1; right = mid2;
@@ -16,11 +16,11 @@ private:
         }
         
         int lengthOfPalindrome = right - (left + 1);
-        int lenLargestPalindrome = R - (L+1);
-        if(lenLargestPalindrome < lengthOfPalindrome)
+        if(curMax < lengthOfPalindrome)
         {
             L = left;
             R = right;
+            curMax = lengthOfPalindrome;
         }
         
         return;
@@ -32,14 +32,14 @@ public:
         string result = "";
         int L, R;
         L = R = 0;
-        
+        int curMax = 0;
         for(int i = 0; i < s.size(); i++)
         {
             // Odd length mid will be the same
-            expandAroundCenter(s, i,i, L, R);
+            expandAroundCenter(s, i,i, L, R, curMax);
             
             // Even length mid will be different
-            expandAroundCenter(s, i, i+1, L, R);
+            expandAroundCenter(s, i, i+1, L, R, curMax);
         }
         
         for(int i = L+1; i < R; i++)
