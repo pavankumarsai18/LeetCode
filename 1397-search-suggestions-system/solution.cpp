@@ -1,86 +1,29 @@
-class Trie{
- public:
-    struct Node{
-        bool ended = false;
-        vector<Node*> children{vector<Node*>(26, NULL)};
-    };
-    
-    Node* Root;
-    Node* cur;
-    
-    
-    void dfsWithPrefix(Node* cur, string & word, vector<string>& result)
-    {
-        if(result.size() == 3)
-            return;
-        if(cur->ended)
-            result.push_back(word);
-        
-        for(char c = 'a'; int(c-'z') <= 0; c++)
-        {
-            if(cur->children[c-'a']){
-                word += c;
-                dfsWithPrefix(cur->children[c-'a'], word, result);
-                word.pop_back();
-            }
-        }
-    }
-    Trie(){
-        Root = new Node();
-    }
-    
-    void insert(string & s)
-    {
-        cur = Root;
-        
-        for(int i = 0; i < s.size(); i++)
-        {
-            if(cur->children[s[i] - 'a'] == NULL)
-                cur->children[s[i] - 'a'] = new Node();
-            cur = cur->children[s[i]-'a'];
-        }
-        
-        cur->ended = true;
-    }
-    
-    vector<string> getWordsStartingWith(string & prefix)
-    {
-        cur = Root;
-        vector<string> result;
-        
-        for(int i = 0; i < prefix.size();i++)
-        {
-            if(cur->children[prefix[i] - 'a'] == NULL)
-                return result;
-            cur = cur->children[prefix[i] - 'a'];
-        }
-        
-        dfsWithPrefix(cur, prefix, result);
-        return result;
-    }
-};
-
-
 class Solution {
 public:
-
-    vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) 
-    {
-        Trie trie = Trie();
+    vector<vector<string>> suggestedProducts(vector<string> &products,
+                                             string searchWord) {
+        sort(products.begin(), products.end());
         vector<vector<string>> result;
-        
-        for(string & s: products){
-            trie.insert(s);
-        }
-        
-        string prefix = "";
-        
-        for(char c: searchWord){
+        int start, bsStart = 0, n=products.size();
+        string prefix;
+        for (char &c : searchWord) {
             prefix += c;
-            result.push_back(trie.getWordsStartingWith(prefix));
+
+            // Get the starting index of word starting with `prefix`.
+            start = lower_bound(products.begin() + bsStart, products.end(), prefix) - products.begin();
+
+            // Add empty vector to result.
+            result.push_back({});
+
+            // Add the words with the same prefix to the result.
+            // Loop runs until `i` reaches the end of input or 3 times or till the
+            // prefix is same for `products[i]` Whichever comes first.
+            for (int i = start; i < min(start + 3, n) && !products[i].compare(0, prefix.length(), prefix); i++)
+                result.back().push_back(products[i]);
+
+            // Reduce the size of elements to binary search on since we know
+            bsStart = start;
         }
         return result;
     }
-    
-
 };
