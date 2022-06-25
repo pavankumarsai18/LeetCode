@@ -2,13 +2,13 @@ class Solution {
 public:
     vector<int> runningSum(vector<int>& nums) 
     {
-        vector<int> runningSum(nums.size(),nums[0]);
+        const int n = nums.size();
         
-        for(int i = 1; i < nums.size();i++)
+        for(int i = 1; i < n; i++)
         {
-            runningSum[i] = runningSum[i-1] + nums[i];
+            nums[i] = nums[i-1] + nums[i];
         }
         
-        return runningSum;
+        return nums;
     }
 };
