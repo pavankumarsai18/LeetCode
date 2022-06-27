@@ -1,14 +1,22 @@
 class Solution {
 public:
-    int minPartitions(string n) {
-        int result = 0;
+    int minPartitions(string n) 
+    {
+        bool count[10] = {0,0,0,0,0,0,0,0,0,0};
+        int ind;
         
-        for(char & c: n)
+        for(int i = 0; i < n.size(); i++)
         {
-            if(result < c - '0')
-                result = c - '0';
+            ind = n[i]-'0';
+            if(!count[ind])
+                count[ind] = 1;
         }
         
-        return result;
+        for(int num=9; num >= 0; num--)
+        {
+            if(count[num])
+                return num;
+        }
+        return 0;
     }
 };
