@@ -4,26 +4,36 @@ public:
     {
         if(x == INT_MIN)
             return 0;
+        bool isNeg = false;
+        if((x>>31)&1){
+            isNeg = true;
+            x = x*-1;   
+        }
+        
+        
         
         int result = 0;
-        bool isNeg = (x < 0)? true: false;
-        
-        if(isNeg)
-            x *= -1;
-        
         
         while(x)
         {
-            int digit = x%10;
-            x /= 10;
+            result += x%10;
             
-            if(INT_MAX/10 < result)
+            // Check overflow
+            if(result > INT_MAX/10 && x >= 10)
+            {
                 return 0;
-            
-            result *= 10;            
-            result += digit;
+            }
+            if(x >= 10)
+            {
+                result *= 10;
+            }
+            x /= 10;
         }
-        return (isNeg)?-1*result:result;
+        
+        if(isNeg)
+            result *= -1;
+        return result;
+        
         
     }
 };
