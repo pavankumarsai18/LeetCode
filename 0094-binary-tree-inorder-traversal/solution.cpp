@@ -10,31 +10,41 @@
  * };
  */
 class Solution {
-private:
-    void inorder(TreeNode* root, vector<int>& result){
-        
-        if(root == nullptr){
-            return;
-        }
-
-        if(root->left != nullptr)
-        {
-            inorder(root->left, result);
-        }
-
-        result.push_back(root->val);
-
-        if(root->right != nullptr){
-            inorder(root->right, result);
-        }
-    
-    }
 public:
-    vector<int> inorderTraversal(TreeNode* root) {
+    vector<int> inorderTraversal(TreeNode* root) 
+    {
+        vector<int> inorder;
         
-        vector<int> result;
-         inorder(root, result);
-        return result;
+        while(root)
+        {
+            if(root->left)
+            {
+                TreeNode* parent = root->left;
+                while(parent->right && parent->right != root)
+                {
+                    parent = parent->right;
+                }
+                
+                if(parent->right == nullptr)
+                {
+                    parent->right = root;
+                    root = root->left;
+                }
+                else
+                {
+                    parent->right = nullptr;
+                    inorder.push_back(root->val);
+                    root = root->right;
+                }
+            }
+            else
+            {
+                inorder.push_back(root->val);
+                root = root->right;
+            }
+        }
+        
+        return inorder;
         
     }
 };
