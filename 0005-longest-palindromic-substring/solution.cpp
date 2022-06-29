@@ -1,51 +1,47 @@
 class Solution {
-private:
-    void expandAroundCenter(string & s, int mid1, int mid2,  int & L, int & R, int & curMax)
+public:
+    void expandAroundCenter(string & s, int mid1, int mid2, int & L, int & R, int & maxLength)
     {
-        int left, right;
-        left = mid1; right = mid2;
+        if(mid1 >= s.size() || mid2 >= s.size())
+            return;
         
-        const int length = s.size();
+        int l, r;
+        l = mid1; r = mid2;
         
-        while(left >= 0 && right < length)
+        while(l >= 0 && r <= s.size())
         {
-            if(s[left] != s[right])
+            if(s[l] != s[r])
+            {
                 break;
-            
-            left--; right++;
+            }
+            l--; r++;
+
+        }
+        int length = r-l-1;
+        if(length > maxLength)
+        {
+            maxLength = length;
+            L = l+1;
+            R = r-1;
         }
         
-        int lengthOfPalindrome = right - (left + 1);
-        if(curMax < lengthOfPalindrome)
-        {
-            L = left;
-            R = right;
-            curMax = lengthOfPalindrome;
-        }
         
         return;
-        
+            
     }
-public:
     string longestPalindrome(string s) 
     {
-        string result = "";
-        int L, R;
-        L = R = 0;
-        int curMax = 0;
+        string ans = "";
+        int L, R, maxLength;
+        L=R=maxLength = 0;
+        
         for(int i = 0; i < s.size(); i++)
         {
-            // Odd length mid will be the same
-            expandAroundCenter(s, i,i, L, R, curMax);
-            
-            // Even length mid will be different
-            expandAroundCenter(s, i, i+1, L, R, curMax);
+            expandAroundCenter(s, i, i, L, R, maxLength);
+            if(i+1 < s.size() && s[i] == s[i+1])
+                expandAroundCenter(s, i, i+1, L, R, maxLength);
         }
         
-        for(int i = L+1; i < R; i++)
-            result += s[i];
-        
-        return result;
-        
+        return s.substr(L, maxLength);
     }
 };
