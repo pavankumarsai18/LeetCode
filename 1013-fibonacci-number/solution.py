@@ -1,21 +1,10 @@
+import numpy as np
 class Solution:
-    def __init__(self):
-        self.a = 1
-        self.b = 2
     def fib(self, N: int) -> int:
-        if N == 0:
-            return 0
-        elif N == 1:
-            return 1
-        elif N == 2:
-            return 1
-        elif N == 3:
-            return 2
-        else:
-            for i in range(4, N + 1):
-                temp = self.a
-                self.a = self.b
-                self.b = self.b + temp
-            return self.b
-            
+        if N <= 1:
+            return N
+        
+        A = np.array(([1,1],[1,0]))
+        A = np.linalg.matrix_power(A, N-1)
+        return A[0][0]
         
