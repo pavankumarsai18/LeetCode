@@ -1,16 +1,18 @@
 class Solution {
 public:
-    int fib(int n) {
-        int prev = 0;
-        int cur = 1;
+    int fib(int n) 
+    {
+        int first, second;
+        first = 0; second = 1;
         
         for(int i = 0; i < n; i++)
         {
-            int temp = prev;
-            prev = cur;
-            cur = cur + temp;
+            int next = first + second;
+            first  = second;
+            second = next;
         }
         
-        return prev;
+        return first;
+        
     }
 };
