@@ -3,16 +3,17 @@ public:
     vector<int> twoSum(vector<int>& nums, int target) 
     {
         unordered_map<int, int> seen;
-        
+        int num;
         for(int i = 0; i < nums.size(); i++)
         {
-            int otherNum = target - nums[i];
-            if(seen.find(otherNum) != seen.end())
+            num = nums[i];
+            auto itr = seen.find(target - num);
+            if(itr != seen.end())
             {
-                return {seen[otherNum],i};
+                return {itr->second, i};
             }
             
-            seen[nums[i]] = i;
+            seen[num] = i;
         }
         
         return {};
