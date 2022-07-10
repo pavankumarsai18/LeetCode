@@ -1,47 +1,21 @@
 class Solution {
-private: 
-    vector<int> pay;
-    
-    int mincost(vector<int>& cost, int index, vector<int>&pay)
-    {
-        // cout<<"index "<<index<<"\n";
-        if(index >= cost.size())
-            return -1;
-        
-        if(pay[index] != -1)
-            return pay[index];
-        
-        int c = 0;
-        c += cost[index];
-        
-        int x = mincost(cost, index+1, pay);
-        int y = mincost(cost, index+2, pay);
-        
-        // cout<<"x "<<x<<" y "<<y<<endl;
-        if(x > 0 || y > 0)
-        {
-            if(x >= y && y > 0)
-                c += y;
-            else if(x > 0 && y >= x)
-                c += x;
-        }
-        // cout<<c<<endl;
-        pay[index] = c;
-        return c;
-        
-    
-    }
 public:
     int minCostClimbingStairs(vector<int>& cost) 
     {
-        for(int i = 0; i < cost.size(); i++)
-            this->pay.push_back(-1);
+        const int n = cost.size();
+        int cost_second = cost[n-2];
+        int cost_first  = cost[n-1];
+        int temp;
         
-        int c = mincost(cost, 0, pay);
-        int C = mincost(cost, 1, pay);
+        for(int stair = n - 3; stair >= 0; stair--)
+        {
+            temp = min(cost_first, cost_second) + cost[stair];
+            cost_first = cost_second;
+            cost_second = temp;
+
+        }
         
-        if(c < C)
-            return c;
-        return C;
+        return min(cost_second, cost_first);
+        
     }
 };
