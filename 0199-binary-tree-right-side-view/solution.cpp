@@ -13,45 +13,31 @@ class Solution {
 public:
     vector<int> rightSideView(TreeNode* root) 
     {
-        vector<TreeNode*> curLevel;
-        curLevel.push_back(root);
+        if(root == nullptr)
+            return {};
+        vector<int> ans;
+        vector<TreeNode*> level;
         
-        vector<int> result;
+        level.push_back(root);
+    
         
-        while(curLevel.size())
+        while(!level.empty())
         {
-            TreeNode* rightMostNode = curLevel[curLevel.size() - 1];
-            if(rightMostNode)
-                result.push_back(rightMostNode->val);
-            
-            vector<TreeNode*> nextLevel;
-            
-            for(int i = 0; i < curLevel.size(); i++)
+            ans.push_back(level[level.size()-1]->val);
+            vector<TreeNode*> newLevel;
+            for(int i = 0; i < level.size(); i++)
             {
-                TreeNode* curNode = curLevel[i];
-                if(curNode && curNode->left != nullptr)
-                {
-                    nextLevel.push_back(curNode->left);
-                }
-                if(curNode && curNode->right != nullptr)
-                {
-                    nextLevel.push_back(curNode->right);
-                }
+                TreeNode* node = level[i];
+                if(node->left)
+                    newLevel.push_back(node->left);
+                if(node->right)
+                    newLevel.push_back(node->right);
             }
             
-            curLevel = nextLevel;
-
-            // for(auto & node: curLevel)
-            // {   if(node == nullptr)
-            //         cout<<"null ";
-            //     else
-            //         cout<<node->val<<" ";
-            // }
-            // cout<<endl;
-            
+            level = newLevel;
         }
         
-        return result;
+        return ans;
         
     }
 };
