@@ -3,18 +3,26 @@ public:
     int lengthOfLongestSubstring(string s) 
     {
         const int n = s.size();
-        int i = 0;
-        unordered_map<char, int> lastSeen;
-        int ans = 0;
-        for(int j = 0; j < s.size(); j++)
+        unordered_map<char, int> charCount;
+        int left, ans;
+        char ch;
+        left = ans = 0;
+        
+        for(int right = 0; right < n; right++)
         {
-            if(lastSeen.find(s[j]) != lastSeen.end())
+            ch = s[right];
+            charCount[ch]++;
+            
+            if(charCount.find(ch) == charCount.end()) ans = max(ans, right - left + 1);
+            
+            while(left <= right && charCount[ch] > 1)
             {
-                i = max(lastSeen[s[j]], i);
+                charCount[s[left]]--;
+                if(charCount[s[left]] == 0) charCount.erase(s[left]);
+                left++;
             }
             
-            ans = max(ans, j - i + 1);
-            lastSeen[s[j]] = j + 1;
+            ans = max(ans, right - left + 1);
         }
         
         return ans;
