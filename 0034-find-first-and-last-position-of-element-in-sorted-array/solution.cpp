@@ -1,69 +1,39 @@
 class Solution {
 public:
-    vector<int> searchRange(vector<int>& nums, int target)
+    vector<int> searchRange(vector<int>& nums, int target) 
     {
-        if(nums.size() == 0)
-        {
-            vector<int> result = {-1, -1};
-            return result;
-        }
-        if(nums.size() == 1)
-        {
-            if(nums[0] == target)
-            {
-                vector<int> result = {0,0};
-                return  result;
-            }
-            else
-            {
-                vector<int> result = {-1,-1};
-                return  result;
-            }
-        }
+        const int n = nums.size();
+        vector<int> ans(2, -1);
         
-        int hi = nums.size() - 1;
-        int lo = 0;
+        if(n == 0) return ans;
         
-        int ind = -1;
+        int lo, hi, mid;
+        lo = 0; hi = n-1;
         
-        while(hi >= lo)
+        while(lo < hi)
         {
-            int mid = (hi + lo)/2;
-
+            mid = lo + ((hi - lo)>>1);
             
-            if(nums[mid] > target)
-            {
-                hi = mid -1;    
-            }
-            else if(nums[mid] < target)
-            {
-                lo = mid + 1;
-            }
-            else
-            {
-                ind = mid;
-                break;
-            }
+            if(nums[mid] > target) hi = mid - 1;
+            else if(nums[mid] < target) lo = mid + 1;
+            else hi = mid;
         }
         
-        if(ind == -1)
+        if(nums[lo] != target) return ans;
+        
+        ans[0] = lo;
+        
+        hi = n - 1;
+        while(lo < hi)
         {
-            vector<int> result= {-1, -1};
-            return result;
+            mid = lo + ((hi - lo + 1)>>1);
+            
+            if(nums[mid] < target) lo = mid + 1;
+            else if(nums[mid] > target) hi = mid - 1;
+            else lo = mid;
         }
         
-        int start = ind;
-        int end = ind;
-        
-        while(start >= 0 && nums[start] == target)
-            start--;
-        start++;
-        while(end < nums.size() && nums[end] == target)
-            end++;
-        end--;
-        
-        vector<int> result = {start, end};
-        return result;
-        
+        ans[1] = lo;
+        return ans;
     }
 };
