@@ -10,48 +10,92 @@
  */
 class Solution {
 public:
+    void print(ListNode* leftNode)
+    {
+        ListNode* cur = leftNode;
+        while(cur)
+        {
+            cout<<cur->val<<" ";
+            cur = cur->next;
+        }
+        cout<<endl;
+    }
+    void reverse(ListNode* & leftNode, ListNode* & rightNode)
+    {
+        ListNode* tail = leftNode;
+        ListNode* cur = leftNode;
+        ListNode* nextNode;
+        ListNode* prev;
+        
+        prev = nullptr;
+        
+        while(cur)
+        {
+            nextNode  = cur->next;
+            
+            cur->next = prev;
+            prev      = cur;
+            
+            cur = nextNode;
+        }
+        
+        leftNode  = prev;
+        rightNode = tail;
+        return; 
+    }
+    
+    
     ListNode* reverseBetween(ListNode* head, int left, int right) 
     {
         
-        if(left == right)
-            return head;
-        ListNode* lo = head; ListNode* hi = head; ListNode* cur = head;
+        ListNode* prev;
+        ListNode* leftNode;
+        ListNode* rightNode;
+        ListNode* cur;
+        ListNode* leftPrev;
+        ListNode* rightNext;
         
-        stack<ListNode*> S;
+        int pos = 1;
         
-        int count = 1;
-        while(count <= right && cur != nullptr)
+        cur = head; 
+        leftNode = rightNode = prev = nullptr;
+        
+        while(cur != nullptr)
         {
-            if(count <= left)
+            if(pos == left)
             {
-                lo = cur;
-                if(count == left)
-                    S.push(cur);
+                leftPrev = prev;
+                leftNode = cur;
             }
-            else
+            if(pos == right)
             {
-                
-                S.push(cur);
-                hi = cur;
+                rightNode = cur;
+                rightNext = rightNode->next;
+                break;
             }
-            count++;
-            cur = cur->next;
-        }
-
-        hi = S.top();S.pop();
-        int length = right - left + 1;
-        count = 0;
-        while(count < length/2)
-        {
-            int temp = lo->val;
-            lo->val = hi->val;
-            hi->val = temp;
             
-            lo = lo->next;
-            hi = S.top();S.pop();
-            count++;
+            pos++;
+            prev = cur;
+            cur  = cur->next;
         }
-        return head;
         
+        if(leftPrev) leftPrev->next = nullptr;
+        rightNode->next = nullptr;
+        
+        // cout<<"unreversed ";
+        // print(leftNode);
+        
+        reverse(leftNode, rightNode);
+        // cout<<"reversed ";
+        // print(leftNode);
+        
+        if(leftPrev) leftPrev->next = leftNode;
+        if(rightNext) rightNode->next = rightNext;
+        
+        // cout<<"head ";
+        // print(head);
+        head = (left == 1)? leftNode:head;
+        
+        return head;
     }
 };
