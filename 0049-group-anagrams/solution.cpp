@@ -1,56 +1,42 @@
 class Solution {
-private:
-    string Hash(string s)
-    {
-    
-        string result = "";
-        vector<int> R(26, 0);
-        
-        for(char c: s)
-        {
-            R[static_cast<int>(c) - 97]++;
-        }
-        
-        
-        for(auto i: R)
-        {
-            result += "#" + to_string(i);
-        }
-        
-        return result;
-        
-    }
 public:
-    vector<vector<string>> groupAnagrams(vector<string>& strs) 
+    string hashAnagram(string & str)
     {
-        vector<vector<string>> result;
-        
-        unordered_map<string, vector<string>> M;
-        
-        for(int i = 0; i < strs.size(); i++)
+        const int numChars = 26;
+        int charCount[numChars] = {0};
+        // Get the char count
+        for(int i = 0; i < str.size(); i++)
         {
-            string h = Hash(strs[i]);
-            auto itr = M.find(h);
-            if(itr == M.end())
-            {
-                vector<string> s= {strs[i]};
-                M[h] = s;
-            }
-            else
-            {
-                M[h].push_back(strs[i]); 
-            }
+            charCount[str[i]-'a']++;
         }
-        
-        for(auto itr = M.begin(); itr != M.end(); itr++)
+
+
+        string result = "";
+        // convert it into a string
+        for(int i = 0; i < numChars; i++)
         {
-            vector<string> s = itr->second;
-            
-            result.push_back(s);
+            result += to_string(charCount[i]) + ',';
         }
-        
-        
+
         return result;
+    }
+
+    vector<vector<string>> groupAnagrams(vector<string>& words) 
+    {
+        unordered_map<string, vector<string>> map;
+        
+        
+        for(int i = 0; i < words.size(); i++)
+        {
+            string hashValue = hashAnagram(words[i]);
+            map[hashValue].push_back(words[i]);
+        }
+        
+        vector<vector<string>> ans;
+        
+        for(auto & [hashVal, anagrams]: map)
+            ans.push_back(anagrams);
+        return ans;
         
         
     }
