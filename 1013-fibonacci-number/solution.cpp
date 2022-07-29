@@ -1,18 +1,20 @@
 class Solution {
 public:
-    int fib(int n) 
-    {
-        int first, second;
-        first = 0; second = 1;
+    int fib(int n) {
+        if(n == 0) return 0;
+        else if(n == 1 || n == 2) return 1;
         
-        for(int i = 0; i < n; i++)
+        int fib_n_2 = 1;
+        int fib_n_1 = 1;
+        int temp;
+        for(int i = 2; i < n; i++)
         {
-            int next = first + second;
-            first  = second;
-            second = next;
+            temp     = fib_n_2;
+            fib_n_2  = fib_n_1;
+            fib_n_1 += temp;
         }
         
-        return first;
+        return fib_n_1;
         
     }
 };
