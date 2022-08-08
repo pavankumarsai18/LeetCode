@@ -10,28 +10,33 @@
  * };
  */
 class Solution {
-private:
-    int postOrder(TreeNode* root, vector<vector<int>> & result)
-    {
-        if(root == nullptr)
-            return 0;
-        
-        int curNodeHeight = max(postOrder(root->left, result), postOrder(root->right, result)) + 1;
-        
-        if(result.size() < curNodeHeight)
-        {
-            result.push_back({});
-        }
-        result[curNodeHeight-1].push_back(root->val);
-        return curNodeHeight;
-        
-    }
 public:
-    vector<vector<int>> findLeaves(TreeNode* root) 
+    int getHeight(TreeNode* node, unordered_map<TreeNode*, int> & heightMap)
     {
-        vector<vector<int>> result;
-        postOrder(root, result);
-        return result;
+        if(node == nullptr) return -1;
+        
+        if(heightMap.find(node) != heightMap.end()) return heightMap[node];
+        
+        int height = max(getHeight(node->left, heightMap), getHeight(node->right, heightMap)) + 1;
+        heightMap[node] = height;
+        
+        return height;
+    }
+    
+    vector<vector<int>> findLeaves(TreeNode* root)
+    {
+        unordered_map<TreeNode*, int> heightMap;
+        
+        int numRemovals = getHeight(root, heightMap);
+        
+        vector<vector<int>> ans(numRemovals + 1, vector<int>());
+        
+        for(auto & [node, height]: heightMap)
+        {
+            ans[height].push_back(node->val);
+        }
+        
+        return ans;
         
     }
 };
