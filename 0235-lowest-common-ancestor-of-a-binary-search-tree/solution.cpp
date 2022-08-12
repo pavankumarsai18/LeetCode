@@ -9,72 +9,48 @@
  */
 
 class Solution {
-private:
-    void findPath(TreeNode* root, TreeNode* target, vector<TreeNode*> & path)
-    {
-        if(root == nullptr || target == nullptr) 
-            return;
-        
-        path.push_back(root);
-
-        if(root->val == target->val)
-        {
-            return;
-        }
-        else
-        {               
-            if(target->val > root->val)
-            {
-                findPath(root->right, target, path);
-            }
-            else if(target->val < root->val)
-            {
-                findPath(root->left, target, path);
-            }
-        }
-    }
 public:
+    bool find(TreeNode* root, TreeNode* target, vector<TreeNode*> & path)
+    {
+        if(root == nullptr) return false;
+        
+        if(root == target)
+        {
+            path.push_back(root);
+            return true;
+        }
+        
+        if(find(root->left, target, path) || find(root->right, target, path))
+        {
+            path.push_back(root);
+            return true;
+        }
+        
+        return false;
+        
+    }
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) 
     {
-        if(root == nullptr)
-            return nullptr;
+        vector<TreeNode*> pPath, qPath;
+        find(root, p, pPath);
+        find(root, q, qPath);
         
         
-        vector<TreeNode*> pPath;
-        findPath(root, p, pPath);
+        int pIndex, qIndex;
+        pIndex = pPath.size() - 1;
+        qIndex = qPath.size() - 1;
         
-        if(pPath.size() == 0)
-            return nullptr;
+        // 2 6
+        // 8 6
         
-        
-        vector<TreeNode*> qPath;
-        findPath(root, q, qPath);
-        
-        if(qPath.size() == 0)
-            return nullptr;
-        
-        
-        TreeNode* result = nullptr;
-        
-        vector<TreeNode*> largePath = pPath;
-        vector<TreeNode*> smallPath = qPath;
-        
-        
-        if(qPath.size() > pPath.size())
+        while(pIndex >= 0 && qIndex >= 0&& qPath[qIndex] == pPath[pIndex])
         {
-            largePath = qPath;
-            smallPath = pPath;
-        }
-
-        for(int i = 0; i < smallPath.size(); i++)
-        {
-            if(largePath[i]->val == smallPath[i]->val)
-            {
-                result = largePath[i];
-            }
+            pIndex--;
+            qIndex--;
         }
         
-        return result;
+        return pPath[pIndex+1];
+        
         
     }
 };
