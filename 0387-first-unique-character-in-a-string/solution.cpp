@@ -1,47 +1,28 @@
 class Solution {
 public:
-    int firstUniqChar(string s) 
-    {
-        unordered_map<char, pair<int, int>> char_count;
+    int firstUniqChar(string s) {
+        vector<pair<int, int>> charCount(26, {0,-1});
+        
+        int index;
         for(int i = 0; i < s.size(); i++)
         {
-            auto itr = char_count.find(s[i]);
-            if(itr == char_count.end())
-            {
-                char_count[s[i]] = pair<int, int>(1, i);
-            }
-            else
-            {
-                auto x = char_count[s[i]];
-                char_count[s[i]] =  pair<int, int>(x.first+1, x.second);
-            }
+            index = s[i] - 'a';
             
+            charCount[index].first = charCount[index].first + 1;
+            charCount[index].second = i;
         }
         
-        for(int i = 0; i < s.size(); i++)
-        {
-            auto itr = char_count.find(s[i]);
-            if(itr != char_count.end())
-            {
-                if(char_count[s[i]].first > 1)
-                    char_count.erase(itr);
-             }
-        }
-
-        if(char_count.size() == 0)
-            return -1;
         
-        
-        int min = s.size();
-        for(auto itr = char_count.begin(); itr != char_count.end(); itr++)
+        int ans = s.size();
+        for(int ch = 0; ch < 26; ch++)
         {
-            if(itr->second.second < min)
+            if(charCount[ch].first == 1 && charCount[ch].second < ans)
             {
-                min = itr->second.second;
+                ans = charCount[ch].second;
             }
         }
-        return min;
-       
+        
+        return (ans == s.size())? -1: ans;
         
         
     }
