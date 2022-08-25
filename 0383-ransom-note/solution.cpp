@@ -1,43 +1,35 @@
 class Solution {
 public:
-    bool canConstruct(string ransomNote, string magazine) 
-    {
-        if(magazine.size() == 0 && ransomNote.size() == 0)
-            return true;
-        else if(magazine.size() == 0)
-            return false;
-        else if(ransomNote.size() == 0)
-            return true;
+    bool canConstruct(string ransomNote, string magazine) {
         
-        unordered_map<char, int> char_count;
+        const int numChars = 26;
+        
+        int magazineCharCount[numChars] = {0};
+        int ransomCharCount[numChars] = {0};
+        
         
         for(int i = 0; i < magazine.size(); i++)
         {
-            auto itr = char_count.find(magazine[i]);
-            if(itr == char_count.end())
-            {
-                char_count[magazine[i]] = 1;
-            }
-            else
-            {
-                char_count[magazine[i]]++;
-            }
+            magazineCharCount[magazine[i] - 'a']++;
         }
         
         for(int i = 0; i < ransomNote.size(); i++)
         {
-            auto itr = char_count.find(ransomNote[i]);
-            if(itr == char_count.end())
-                return false;
-            if(itr->second > 0)
-            {
-                char_count[ransomNote[i]]--;
-            }
-            else
+            ransomCharCount[ransomNote[i] - 'a']++;
+        }
+        
+        for(int i = 0; i < numChars; i++)
+        {
+            if(magazineCharCount[i] < ransomCharCount[i])
             {
                 return false;
             }
         }
+        
         return true;
+        
+        
+        
+        
     }
 };
