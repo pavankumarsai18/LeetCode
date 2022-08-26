@@ -1,69 +1,52 @@
 class Solution {
 public:
-    bool reorderedPowerOf2(int N) {
-        int p = log2(N);
-        p *= 2;
-        while(p >= 0)
+    vector<int> getDigitCount(int n)
+    {
+        vector<int> digitCount(10, 0);
+        
+        while(n)
         {
-            unordered_map<int, int> num_digits;
-            unordered_map<int,int> num_two;
+            digitCount[n%10]++;
+            n /= 10;
+        }
+        
+        return digitCount;
+    }
+    
+    
+    bool reorderedPowerOf2(int n) 
+    {
+        
+        // get the max number possible from n
+        // get all the powers of two less than max number
+        // for each possible power of two less than or eq to max number
+        // check if the number is an anagram of power of two
+        
+        int power_two  = 1;
+        const int max_num_size = 31;
+        vector<int> numDigits = getDigitCount(n);
+        
+        for(int iterations = 0; iterations < max_num_size; iterations++)
+        {
+            vector<int> powerDigits = getDigitCount(power_two);
             
-            int temp = N;
-            while(temp > 0)
+            bool can_reorder = true;
+            
+            for(int i = 0; i < 10; i++)
             {
-                if(num_digits.find(temp%10) == num_digits.end())
+                if(powerDigits[i] != numDigits[i])
                 {
-                    num_digits[temp%10] = 1;
+                    can_reorder = false;
+                    break;
                 }
-                else
-                {
-                    num_digits[temp%10] += 1;
-                }
-                temp /= 10;
             }
             
-            temp = pow(2,p);
-            while(temp > 0)
-            {
-                if(num_two.find(temp%10) == num_two.end())
-                {
-                    num_two[temp%10] = 1;
-                }
-                else
-                {
-                    num_two[temp%10] += 1;
-                }
-                temp /= 10;
-            }
+            if(can_reorder) return true;
             
-            bool does_contain = true;
-            if(num_two.size() != num_digits.size())
-            {
-                p --;
-                continue;
-            }
-           for(auto itr = num_two.begin(); itr != num_two.end(); itr++)
-            {
-
-               if(num_two.find(itr->first) != num_two.end())
-               {
-                    if( num_digits[itr->first] != num_two[itr->first])
-                    {
-                        does_contain = false;
-                        break;
-                    }
-               }  
-            }
-            if(does_contain)
-            {
-                // cout<<p<<endl;
-                return true;
-            }
-
-            
-            p--;
+            power_two <<= 1;
         }
         
         return false;
+        
     }
 };
