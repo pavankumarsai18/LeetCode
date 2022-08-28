@@ -1,77 +1,59 @@
 class Solution {
 public:
-    vector<vector<int>> diagonalSort(vector<vector<int>>& mat) 
+    void traverseAndSortDiag(array<int, 2> & pos, vector<vector<int>>& mat, const int & numRows, const int& numCols)
     {
-        if(mat.size() == 0)
-            return mat;
+        int s_row, s_col;
+        s_row = pos[0]; s_col = pos[1];
         
-        // cout<<mat.size()<<endl;
-        // cout<<mat[0].size()<<endl;
-        int d = 0;
+        vector<int> diagonal;
         
-        while( d < mat.size() + mat[0].size() - 1)
+        while(s_row < numRows && s_col < numCols)
         {
-            // cout<<d<<endl;
-            int col, row;
-            if(d < mat[0].size())
-            {
-                vector<int> diag;
-                col = d;
-                row = 0;
-                while(row < mat.size() && col < mat[0].size())
-                {
-                    diag.push_back(mat[row][col]);
-                    row++;
-                    col++;
-                }
-                sort(diag.begin(), diag.end());
-                
-                row = 0;
-                col = d;
-                int i = 0;
-                while(row < mat.size() && col < mat[0].size())
-                {
-                    mat[row][col] = diag[i];
-                    row++;
-                    col++;
-                    i++;
-                }  
-            }
-            else
-            {
-                vector<int> diag;
-                int temp = d;
-                d -= mat[0].size();
-                // cout<<"d "<<d<<endl;
-                
-                row = d;
-                col = 0;
-                while(row < mat.size() && col < mat[0].size())
-                {
-                    diag.push_back(mat[row][col]);
-                    row++;
-                    col++;
-                }
-                
-                sort(diag.begin(), diag.end());
-                
-                row = d;
-                col = 0;
-                int i = 0;
-                while(row < mat.size() && col < mat[0].size())
-                {
-                    mat[row][col] = diag[i];
-                    row++;
-                    col++;
-                    i++;
-                }  
-                
-                d = temp;
-            }
-            
-            d++;
+            diagonal.push_back(mat[s_row][s_col]);
+            s_row++; s_col++;
         }
         
+        sort(diagonal.begin(), diagonal.end());
+        
+        s_row = pos[0]; s_col = pos[1];
+        
+        int cur_index = 0;
+        while(s_row < numRows && s_col < numCols)
+        {
+            mat[s_row][s_col] = diagonal[cur_index];
+            s_row++; s_col++;
+            cur_index++;
+        }
+        
+        return;
+        
+    }
+    
+    
+    vector<vector<int>> diagonalSort(vector<vector<int>>& mat) 
+    {
+        
+        const int numRows = mat.size();
+        const int numCols = mat[0].size();
+        
+        vector<array<int, 2>> startPos;
+        for(int row = numRows-1; row >= 0; row--)
+        {
+            startPos.push_back({row, 0});
+        }
+        
+        for(int col = 1; col < numCols; col++)
+        {
+            startPos.push_back({0, col});
+        }
+        
+        for(auto & start: startPos)
+        {
+            traverseAndSortDiag(start, mat, numRows, numCols);
+        }
+        
+        
         return mat;
+        
     }
 };
