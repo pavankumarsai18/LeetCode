@@ -11,40 +11,48 @@
  */
 class Solution {
 public:
+    
     vector<int> inorderTraversal(TreeNode* root) 
     {
-        vector<int> inorder;
+        vector<int> ans;
         
-        while(root)
+        
+        TreeNode* node = root;
+        
+        
+        while(node)
         {
-            if(root->left)
+            if(node->left)
             {
-                TreeNode* parent = root->left;
-                while(parent->right && parent->right != root)
+                TreeNode* pred = node->left;
+                while(pred && pred->right && pred->right != node)
                 {
-                    parent = parent->right;
+                    pred = pred->right;
                 }
                 
-                if(parent->right == nullptr)
+                
+                if(pred->right == node)
                 {
-                    parent->right = root;
-                    root = root->left;
+                    pred->right = nullptr;
+
+                    ans.push_back(node->val);
+                    node = node->right;
                 }
                 else
                 {
-                    parent->right = nullptr;
-                    inorder.push_back(root->val);
-                    root = root->right;
+                    pred->right =  node;
+                    node = node->left;
                 }
+                
             }
             else
             {
-                inorder.push_back(root->val);
-                root = root->right;
+                ans.push_back(node->val);
+                node = node->right;
             }
         }
         
-        return inorder;
         
+        return ans;
     }
 };
