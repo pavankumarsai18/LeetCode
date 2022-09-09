@@ -4,35 +4,32 @@ public:
     {
         if(str1 == str2) return true;
         
+        vector<bool> uniqueChars(26, false);
+        int numUnique = 0;
+        vector<char>map(26, '-');
         
-        vector<int> conversionMappings(26, ' ');
-        vector<bool> str2Chars(26, false);
-        int numUniqueInStr2 = 0;
-
-        int ind1, ind2;
         for(int i = 0; i < str1.size(); i++)
         {
-            ind1 = str1[i] - 'a';
-            ind2 = str2[i] - 'a';
+            int ind1 = str1[i] - 'a';
+            int ind2 = str2[i] - 'a';
             
-            if(conversionMappings[ind1] == ' ')
+            if(map[ind1] == '-')
             {
-                conversionMappings[ind1] = ind2;
-                
-                if(!str2Chars[ind2])
-                {
-                    numUniqueInStr2++;
-                    str2Chars[ind2] = true;
-                }
-                
+                map[ind1] = str2[i];
             }
-            else if(conversionMappings[ind1] != ind2)
+            else if(map[ind1] != str2[i])
+            {
                 return false;
+            }
+            
+            if(!uniqueChars[ind2])
+            {
+                numUnique++;
+                uniqueChars[ind2] = true;
+            }
         }
         
-        if(numUniqueInStr2 < 26) return true;
+        if(numUnique < 26) return true;
         return false;
-        
-        
     }
 };
