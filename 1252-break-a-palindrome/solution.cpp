@@ -1,6 +1,7 @@
 class Solution {
 public:
-    string breakPalindrome(string palindrome) {
+    string breakPalindrome(string palindrome) 
+    {
         const int n = palindrome.size();
         int left, right;
         left = 0; right = n - 1;
@@ -40,7 +41,6 @@ public:
         }
         
         return "";
-        
         
     }
 };
