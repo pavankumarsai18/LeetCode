@@ -1,18 +1,52 @@
 class Solution {
 public:
-    int largestPerimeter(vector<int>& A) 
+    bool validTriangle(int & a, int & b, int & c)
     {
-        std::sort(A.begin(), A.end());  
+        return ((a+b) > c && (b+c) > a && (c+a) > b);
+    }
+    
+    int largestPerimeter(vector<int>& nums)
+    {
+        if(nums.size() < 3) return 0;
         
-        for(int i = A.size() - 1; i >= 2; i--)
+        priority_queue<int> pq;
+        for(int & num: nums)
         {
-            if(A[i - 1] + A[i - 2] > A[i])
-            {
-                return A[i] + A[i - 1] + A[i - 2];
-            }
-            
+            pq.push(num);
         }
         
-        return 0;
+        bool foundTriangle = false;
+        deque<int> sides;
+        int ans = 0;
+        
+        while(sides.size() < 3)
+        {
+            sides.push_back(pq.top());
+            pq.pop();
+        }
+        
+        
+        if(validTriangle(sides[0], sides[1], sides[2]))
+        {
+            ans = sides[0] + sides[1] + sides[2];
+            return ans;
+        }
+        
+        while(pq.size()>0)
+        {
+            sides.pop_front();
+            sides.push_back(pq.top()); pq.pop();
+
+            // cout<<sides[0]<<" "<<sides[1]<<" "<<sides[2]<<" "<<ans<<endl;
+            if(validTriangle(sides[0], sides[1], sides[2]))
+            {
+                ans = sides[0] + sides[1] + sides[2];
+                return ans;
+            }
+        }
+        
+    
+        return ans;
+        
     }
 };
