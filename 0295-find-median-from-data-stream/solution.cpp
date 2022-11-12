@@ -1,45 +1,47 @@
 class MedianFinder {
 private:
-    priority_queue<int> smaller;
-    priority_queue<int, vector<int>, greater<int>> larger;
+    priority_queue<int, vector<int>, greater<int>> secondHalf;
+    priority_queue<int> firstHalf;
 public:
     MedianFinder() 
     {
-        smaller = priority_queue<int>();
-        larger  = priority_queue<int, vector<int>, greater<int>>();
+        
     }
     
     void addNum(int num) 
     {
-        smaller.push(num);
+        int size = firstHalf.size() + secondHalf.size();
         
-        if(smaller.size() && larger.size() && smaller.top() > larger.top())
-        {
-            larger.push(smaller.top());
-            smaller.pop();
-        }
+        firstHalf.push(num);
         
-        if(smaller.size() > larger.size() + 1)
+        if(secondHalf.size() && firstHalf.top() > secondHalf.top())
         {
-            larger.push(smaller.top());
-            smaller.pop();
+            secondHalf.push(firstHalf.top());
+            firstHalf.pop();
         }
-        else if(larger.size() > smaller.size() + 1)
+            
+        
+        if(firstHalf.size() > secondHalf.size() + 1)
         {
-            smaller.push(larger.top());
-            larger.pop();
+            secondHalf.push(firstHalf.top());
+            firstHalf.pop();
+        }
+        else if(secondHalf.size() > firstHalf.size() + 1)
+        {
+            firstHalf.push(secondHalf.top());
+            secondHalf.pop();
         }
         
     }
     
     double findMedian() 
     {
-        if(smaller.size() > larger.size())
-            return smaller.top();
-        else if(larger.size() > smaller.size())
-            return larger.top();
+        if(firstHalf.size() > secondHalf.size())
+            return firstHalf.top();
+        else if(secondHalf.size() > firstHalf.size())
+            return secondHalf.top();
         
-        return (smaller.top() + larger.top())/2.0;
+        return (firstHalf.top() + secondHalf.top())/2.0;
         
     }
 };
