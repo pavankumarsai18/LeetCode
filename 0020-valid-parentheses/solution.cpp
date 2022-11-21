@@ -1,42 +1,30 @@
 class Solution {
 public:
-    bool isValid(string s) 
+    bool isValid(string input) 
     {
-        stack<char> Matcher;
+        stack<char> S;
         
-        for(int i = 0; i < s.size(); i++)
+        for(int i = 0; i < input.size(); i++)
         {
-            if(s[i] == '(' || s[i] == '[' || s[i] == '{')
+            if(input[i] == '(' || input[i] == '{' || input[i] == '[')
             {
-                Matcher.push(s[i]);
+                S.push(input[i]);
             }
-            else if(s[i] == ')' || s[i] == ']' || s[i] == '}')
+            else
             {
-                if(Matcher.size() == 0)
-                {
-                    return false;
-                }
-                
-                if(s[i] == ')' && Matcher.top() == '(')
-                {
-                    Matcher.pop();
-                }
-                else if(s[i] == ']' && Matcher.top() == '[')
-                {
-                    Matcher.pop();
-                }
-                else if(s[i] == '}' && Matcher.top() == '{')
-                {
-                    Matcher.pop();
-                }
-                else{
-                    return false;
-                }
-            }
+               
+                if(S.empty()) return false;
             
+                else if((input[i] == ')' && S.top() == '(') || (input[i] == ']' && S.top() == '[') || (input[i] == '}' && S.top() == '{'))
+                {
+                    S.pop();
+                }
+                else
+                    return false;
+            }
         }
         
-        return Matcher.empty();
+        return S.empty();
         
     }
 };
