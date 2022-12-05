@@ -1,57 +1,35 @@
-// *
-//  * Definition for singly-linked list.
-//  * struct ListNode {
-//  *     int val;
-//  *     ListNode *next;
-//  *     ListNode(int x) : val(x), next(NULL) {}
-//  * };
-
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
 class Solution {
 public:
-    ListNode* middleNode(ListNode* head)
+    ListNode* middleNode(ListNode* head) 
     {
-        int length = 1;
-        ListNode* cur_node = head;
+        ListNode* fast;
+        ListNode* slow;
         
-        while(cur_node->next != NULL)
+        fast = slow = head;
+        
+        while(fast != nullptr)
         {
-            cur_node = cur_node->next;
-            length++;
-        }
-        
-        //cout<<length<<endl;
-        
-        int result_index;
-        
-        if(length%2 == 0){
-            result_index = (length/2) + 1;
-            //cout<<result_index<<endl;
-            cur_node = head;
-
-            while(result_index > 1)
-            {
-                cur_node = cur_node->next;
-                result_index --;
+            fast = fast->next;
+            if(fast){
+                fast = fast->next;
             }
-        }
-        else
-        {
-            result_index = length/2;
-            //cout<<result_index<<endl;
-            cur_node = head;
-        
-            while(result_index > 0)
-            {
-                cur_node = cur_node->next;
-                result_index --;
-            }
+            else break;
+            
+            slow = slow->next;
+            
         }
         
+        return slow;
         
-        
-        //cout<<cur_node->val;
-        //ListNode result = &cur_node;
-        
-        return cur_node;
     }
 };
