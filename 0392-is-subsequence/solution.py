@@ -1,23 +1,29 @@
-class Solution(object):
-    def isSubsequence(self, s, t):
-        """
-        :type s: str
-        :type t: str
-        :rtype: bool
-        """
-        if len(s) > len(t):
+class Solution:
+    def __init__(self):
+        self.memo = {}
+    
+    def isSubsequence(self, s: str, t: str) -> bool:
+        
+        key = s + ',' + t
+        if key in self.memo:
+            return self.memo[key]
+        
+        if s == t or (s == '' and len(t) > 0):
+            self.memo[key] = True
+            return True
+                
+        if len(t) < len(s) or (len(s) == len(t) and s != t):
+            self.memo[key] = False
             return False
-        if len(s) == len(t):
-            return s == t
         
-        sPtr = 0
-        tPtr = 0
+        if s[0] == t[0]:
+            ans = self.isSubsequence(s[1:], t[1:]) or self.isSubsequence(s, t[1:])
+            self.memo[key] = ans
+            return ans
         
-        while (tPtr < len(t) and sPtr < len(s)):
-            if s[sPtr] == t[tPtr]:
-                sPtr += 1
-                tPtr += 1
-            else:
-                tPtr += 1
-        return (sPtr == len(s) and tPtr <= len(t))
-            
+        self.memo[key] = self.isSubsequence(s, t[1:])
+        return self.memo[key]
+        
+        
+        
+
