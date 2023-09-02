@@ -1,48 +1,37 @@
 class Solution {
 public:
-    int compress(vector<char>& chars) 
-    {
-        int totalLen, rIndex, wIndex;
-        totalLen = rIndex = wIndex = 0;
-        
-        while(rIndex < chars.size())
-        {
-            char curChar = chars[rIndex];
-            int count = 0;
-            while(rIndex < chars.size() && chars[rIndex] == curChar)
-            {
-                rIndex++;
-                count++;
+    int compress(vector<char>& chars) {
+        int ans = 0;
+        const int n = chars.size();
+        int prev = 0;
+        for (int cur = 0; cur < n; ++cur, ++prev) {
+            int numOccurances = 1;
+            char curChar = chars[cur];
+            while (cur + 1 < n && curChar == chars[cur+1]) {
+                ++cur;
+                ++numOccurances;
             }
             
-            if(count == 1)
-            {
-                chars[wIndex++] = curChar;
-                totalLen++;
+            ++ans;
+            
+
+            if (prev != cur) {
+                chars[prev] = curChar;
             }
-            else
-            {
-                chars[wIndex++] = curChar;
-                totalLen++;
-                
-                string strNum = "";
-                while(count)
-                {
-                    int digit = count%10;
-                    
-                    strNum += char(digit + '0');
-                    count /= 10;
+            if(numOccurances > 1) {
+                string numStr = to_string(numOccurances);
+                ans += numStr.size();
+                for (auto & c : numStr) {
+                    chars[++prev] = c;
                 }
-                
-                
-                for(int i = strNum.size()-1; i >= 0; i--)
-                {
-                    chars[wIndex++] = strNum[i];
-                    totalLen++;
-                }
+
+                // chars[++prev] = curChar;
+
+
             }
+
         }
-        return totalLen;
-        
+
+        return ans;
     }
 };
