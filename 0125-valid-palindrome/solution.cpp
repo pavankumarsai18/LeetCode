@@ -1,22 +1,30 @@
 class Solution {
 public:
-    bool isPalindrome(string s) 
-    {
-        string alpha_n= "";
-        
-        for(int i = 0; i < s.size(); i++)
-        {
-            if(isalnum(s[i]))
-                alpha_n += tolower(s[i]);
+    bool isPalindrome(string s) {
+        int left, right;
+        const int n = s.size();
+
+        left = 0; right = n - 1;
+
+        while (left <= right) {
+            char lChar = tolower(s[left]);
+            char rChar = tolower(s[right]);
+            if (isalnum(lChar))
+            {
+                if (isalnum(rChar)) {
+                    if (rChar == lChar) {
+                        left++; right--;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    right--;
+                }
+            } else {
+                left++;
+            }
         }
-        
-        string r_a_n = alpha_n;
-        for(int i = 0; i < r_a_n.size()/2; i++)
-        {
-            std::swap(r_a_n[i], r_a_n[r_a_n.size() - 1 - i]);
-        }
-        if(r_a_n == alpha_n)
-            return true;
-        return false;
+
+        return true;
     }
 };
