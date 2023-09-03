@@ -1,15 +1,12 @@
 class Solution {
 public:
-    int singleNumber(vector<int>& nums) 
-    {
-        auto one_number = 0;
-        
-        for(auto & num: nums)
-        {
-            one_number ^= num;
+    int singleNumber(vector<int>& nums) {
+        int rollingXor = 0;
+
+        for (int i = 0; i < nums.size(); ++i) {
+            rollingXor ^= nums[i];
         }
-        
-        return one_number;
-        
+
+        return rollingXor;
     }
 };
