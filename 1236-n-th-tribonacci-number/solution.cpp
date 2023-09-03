@@ -1,20 +1,24 @@
 class Solution {
 public:
-    int tribonacci(int n) 
-    {
-    
-        long long trib[3] = {0,1, 1};
-     
-        for(int i = 0; i < n; i++)
-        {
-            long long firstTerm = trib[0];
-            long long secondTerm = trib[1];
-            trib[0] = trib[1];
-            trib[1] = trib[2];
-            trib[2] = trib[2] + firstTerm + secondTerm;
+    int tribonacci(int n) {
+
+        if (n == 0) {
+            return 0;
+        } else if (n == 1 || n == 2) {
+            return 1;
         }
-        
-        return static_cast<int>(trib[0]);
+
+        int T_n, T_n1, T_n2;
+        T_n = 0, T_n1 = 1, T_n2 = 1;
+
+        for (int i = 3; i <= n; ++i) {
+            int temp = T_n2;
+            T_n2 += (T_n1 + T_n);
+            T_n = T_n1;
+            T_n1 = temp;
+        }
+
+        return T_n2;
         
     }
 };
