@@ -10,92 +10,55 @@
  */
 class Solution {
 public:
-    void print(ListNode* leftNode)
-    {
-        ListNode* cur = leftNode;
-        while(cur)
-        {
-            cout<<cur->val<<" ";
-            cur = cur->next;
-        }
-        cout<<endl;
-    }
-    void reverse(ListNode* & leftNode, ListNode* & rightNode)
-    {
-        ListNode* tail = leftNode;
-        ListNode* cur = leftNode;
-        ListNode* nextNode;
-        ListNode* prev;
-        
-        prev = nullptr;
-        
-        while(cur)
-        {
-            nextNode  = cur->next;
-            
+    vector<ListNode*> reverse(ListNode* head) {
+        // Returns head and tail of reversed Linked List
+        ListNode* revHead = nullptr;
+        ListNode* revTail = head;
+        ListNode* cur = head;
+
+        ListNode* prev = nullptr;
+        while (cur) {
+            ListNode* nextNode = cur->next;
             cur->next = prev;
-            prev      = cur;
-            
+            prev = cur;
             cur = nextNode;
         }
-        
-        leftNode  = prev;
-        rightNode = tail;
-        return; 
+
+        revHead = prev;
+        return {revHead, revTail};
     }
-    
-    
-    ListNode* reverseBetween(ListNode* head, int left, int right) 
-    {
-        
-        ListNode* prev;
-        ListNode* leftNode;
-        ListNode* rightNode;
-        ListNode* cur;
-        ListNode* leftPrev;
-        ListNode* rightNext;
-        
-        int pos = 1;
-        
-        cur = head; 
-        leftNode = rightNode = prev = nullptr;
-        
-        while(cur != nullptr)
-        {
-            if(pos == left)
-            {
-                leftPrev = prev;
-                leftNode = cur;
-            }
-            if(pos == right)
-            {
-                rightNode = cur;
-                rightNext = rightNode->next;
-                break;
-            }
-            
-            pos++;
-            prev = cur;
-            cur  = cur->next;
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+
+        if (left == right) {
+            return head;
         }
-        
-        if(leftPrev) leftPrev->next = nullptr;
-        rightNode->next = nullptr;
-        
-        // cout<<"unreversed ";
-        // print(leftNode);
-        
-        reverse(leftNode, rightNode);
-        // cout<<"reversed ";
-        // print(leftNode);
-        
-        if(leftPrev) leftPrev->next = leftNode;
-        if(rightNext) rightNode->next = rightNext;
-        
-        // cout<<"head ";
-        // print(head);
-        head = (left == 1)? leftNode:head;
-        
-        return head;
+        ListNode* dummy = new ListNode(0, head);
+        ListNode* cur = head;
+        ListNode* prev = dummy;
+        ListNode* leftPrev = nullptr;
+        ListNode* rightNext = nullptr;
+        ListNode* headRemoved = nullptr;
+        int curIdx = 1;
+
+        while (curIdx != right) {
+            if (curIdx == left) {
+                leftPrev = prev;
+                headRemoved = cur;
+                prev->next = nullptr;
+            }
+            prev = cur;
+            cur = cur->next;
+            curIdx++;
+        }
+
+        rightNext = cur->next;
+        cur->next = nullptr;
+
+        auto nodes = reverse(headRemoved);
+        leftPrev->next = nodes[0];
+        nodes[1]->next = rightNext;
+
+        return dummy->next;
+
     }
 };
