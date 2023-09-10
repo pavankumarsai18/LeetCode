@@ -1,37 +1,23 @@
 class Solution {
 public:
-    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) 
-    {
-        int ind2, ind1;
-        ind2 = n - 1;
-        ind1 = m - 1;
-        
-        int total = n + m;
-        for(int i = 0; i < total && ind1 >= 0 || ind2 >= 0; i++)
-        {
-            // cout<<"i "<<i<<" ind1 "<<ind1<<" ind2 "<<ind2<<endl;
-            if(ind1 >= 0 && ind2 < 0)
-            {
-                nums1[total-i-1] = nums1[ind1--];
-            }
-            else if(ind1 < 0 && ind2 >= 0)
-            {
-                nums1[total-i-1] = nums2[ind2--];
-            }
-            else
-            {
-                if(nums2[ind2] > nums1[ind1])
-                {
-                    nums1[total - i - 1] = nums2[ind2--];
-                }
-                else
-                {
-                    nums1[total - i - 1] = nums1[ind1--];
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int idx1, idx2, idx;
+        idx1 = m - 1;
+        idx2 = n - 1;
+
+        int writeIdx = m + n - 1;
+        while (writeIdx >= 0) {
+            if (idx1 < 0 && idx2 >= 0) {
+                nums1[writeIdx--] = nums2[idx2--];
+            } else if (idx2 < 0) {
+                nums1[writeIdx--] = nums1[idx1--];
+            } else {
+                if (nums1[idx1] > nums2[idx2]){
+                    nums1[writeIdx--] = nums1[idx1--];
+                } else {
+                    nums1[writeIdx--] = nums2[idx2--];
                 }
             }
         }
-        
-        return;
-        
     }
 };
