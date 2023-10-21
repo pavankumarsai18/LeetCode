@@ -1,51 +1,46 @@
-class Solution:    
-    def minWindow(self, text, pattern):
-        patternCount   = defaultdict(int)
-        remainingChars = len(pattern)
-        patternChars   = [False]*56
-        for ch in pattern:
-            patternCount[ch] += 1
-            
-            index = ord(ch) - ord('a')
-            if ch.isupper():
-                index = ord(ch) - ord('A')
-            patternChars[index] = True
-            
-        ansLeft, ansRight = 0,0
-        minLength         = float('inf')
-        
-        left = 0
-        for right, ch in enumerate(text):
-            index = ord(ch) - 97
-            
-            if index < 0:
-                index = ord(ch) - 65
-            
-            if patternChars[index]:
-                if patternCount[ch] > 0:
-                    remainingChars -= 1
-                patternCount[ch] -= 1
-            
-                if remainingChars == 0:
-                    while True:
-                        ch = text[left]
-                        if ch in patternCount:
-                            if patternCount[ch] == 0:
-                                break
-                            else:
-                                left += 1
-                                patternCount[ch] += 1
-                        else:
-                            left += 1
-                
-                    length = right - left + 1
-                    if length < minLength:
-                        minLength = length
-                        ansLeft, ansRight = left, right
-                
-                    patternCount[text[left]] = 1
-                    remainingChars           = 1
-                    left += 1
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        n = len(s)
 
-        return text[ansLeft:ansRight+1] if minLength < float('inf') else ""
-                    
+        tCount = {}
+
+        for char in t:
+            tCount[char] = tCount.get(char, 0) + 1
+        
+        charCount = {}
+
+        lo = 0
+        res_lo, res_hi = -1, -1
+        ans_len = float('inf')
+
+        have = 0
+        need = len(tCount)
+
+        for hi in range(len(s)):
+            charCount[s[hi]] = charCount.get(s[hi], 0) + 1
+
+            if s[hi] in tCount and charCount[s[hi]] == tCount[s[hi]]:
+                have += 1
+
+            while have == need:
+                if (hi - lo + 1) < ans_len:
+                    res_lo, res_hi = lo, hi
+                    ans_len = hi - lo + 1
+                
+                charCount[s[lo]] -= 1
+                if s[lo] in tCount and tCount[s[lo]] > charCount[s[lo]]:
+                    have -= 1
+                lo += 1
+
+        if ans_len == float('inf'):
+            return ""
+        return s[res_lo:res_hi+1]
+
+
+
+
+
+                
+
+
+
