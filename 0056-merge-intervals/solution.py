@@ -1,17 +1,33 @@
-class Solution(object):
-    
-    def merge(self, intervals):
-        """
-        :type intervals: List[List[int]]
-        :rtype: List[List[int]]
-        """
+class Solution:
+    def overlaps(self, cur_interval, next_interval):
+        a, b = cur_interval
+        c, d = next_interval
+
+        # a c d b
+        # a c b d
         
-        intervals = sorted(intervals, key=lambda x: x[0])
-        
-        result = []
-        for interval in intervals:
-            if len(result) == 0 or result[-1][1] < interval[0]:
-                result.append(interval)
-            else:
-                result[-1][1] = max(result[-1][1], interval[1])
-        return result
+        if a <= c <= b:
+            return (True, [a, max(b, d)])
+        else:
+            return (False, None)
+
+
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort()
+
+        ans = []
+        n = len(intervals)
+        idx = 0
+        while idx < n:
+            cur_interval = intervals[idx]
+            while idx + 1 < n:
+                overlap, merged_int =  self.overlaps(cur_interval, intervals[idx + 1])
+                if overlap:
+                    cur_interval = merged_int
+                    idx += 1
+                else:
+                    break
+            ans.append(cur_interval)
+            idx += 1
+
+        return ans
