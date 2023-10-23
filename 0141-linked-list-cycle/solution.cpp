@@ -8,33 +8,19 @@
  */
 class Solution {
 public:
-    bool hasCycle(ListNode *head) 
-    {
-        ListNode* rabbit   = head;
-        ListNode* tortoise = head;
-        
-        while(rabbit != nullptr && tortoise != nullptr)
-        {
-            
-            
-            rabbit = rabbit->next;
-            if(rabbit == nullptr)
-            {
-                return false;
-            }
-            
-            rabbit = rabbit->next;
-            tortoise = tortoise->next;
-            if(rabbit == tortoise)
-            {
-                return true;
-            }
+    bool hasCycle(ListNode *head) {
+        bool ans = false;
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while (slow && fast){
+            slow = slow->next;
+            fast = fast->next;
+            if (fast) fast = fast->next;
+
+            if (slow && fast && slow == fast) return true;
         }
-        
+
         return false;
-        
-        
-        
-        
     }
 };
