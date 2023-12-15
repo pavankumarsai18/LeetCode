@@ -1,19 +1,16 @@
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        
-        def hashValue(word):
-            
-            
-            return str(num_count)
-        
-        anagrams = defaultdict(list)
-        
+        anagrams = dict()
+
         for word in strs:
-            num_count = [0 for _ in range(26)]
+            sorted_word = "".join(sorted([c for c in word]))
+
+            if sorted_word not in anagrams:
+                anagrams[sorted_word] = list()
             
-            for ch in word:
-                num_count[ord(ch)-ord('a')] += 1
-            anagrams[tuple(num_count)].append(word)
+            anagrams[sorted_word].append(word)
 
         
         return anagrams.values()
+
+
