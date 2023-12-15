@@ -5,11 +5,12 @@ public:
         int maxDiff = 0;
 
         for (int i = 1; i < prices.size(); ++i) {
-            maxDiff = max(prices[i] - curMin, maxDiff);
-            if (curMin > prices[i]) curMin = prices[i];
+            int diff = prices[i] - curMin;
+
+            maxDiff = max(maxDiff, diff);
+            curMin = min(curMin, prices[i]);
         }
 
-        if (maxDiff < 0) return 0;
         return maxDiff;
 
     }
