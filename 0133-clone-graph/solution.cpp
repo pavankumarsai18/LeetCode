@@ -21,58 +21,59 @@ public:
 
 class Solution {
 public:
-    Node* cloneGraph(Node* node) 
-    {
-        if(node == nullptr)
-            return nullptr;
-        
+    Node* cloneGraph(Node* node) {
+        if (node == nullptr) return nullptr;
+
+        // clone nodes and store in hash map
         unordered_map<Node*, Node*> oldNode_newNode_map;
-        unordered_set<Node*> visited;
-        
+
         queue<Node*> Q;
+        unordered_set<Node*>visited;
+
         Q.push(node);
         visited.insert(node);
-        while(Q.size() > 0)
-        {
-            Node* node = Q.front(); Q.pop();
-            Node* newNode = new Node(node->val);
-            
-            oldNode_newNode_map[node] = newNode;
-            
-            for(Node* neighbor: node->neighbors)
-            {
-                if(visited.find(neighbor) == visited.end())
-                {
-                    Q.push(neighbor);
-                    visited.insert(neighbor);
+
+        while (Q.size()) {
+
+            Node* oldNode = Q.front(); Q.pop();
+            Node* newNode = new Node(oldNode->val);
+
+            oldNode_newNode_map[oldNode] = newNode;
+
+            for (auto & neigh: oldNode->neighbors) {
+                bool notSeen = (visited.find(neigh) == visited.end());
+                if (notSeen) {
+                    Q.push(neigh);
+                    visited.insert(neigh);
                 }
-            }   
-        }        
-        
-        visited.clear();
-        
-        Q.push(node);
-        visited.insert(node);
-        
-        while(Q.size() > 0)
-        {
-            Node* node = Q.front(); Q.pop();
-            
-            Node* new_node = oldNode_newNode_map[node];
-            
-            for(Node* neighbor: node->neighbors)
-            {
-                new_node->neighbors.push_back(oldNode_newNode_map[neighbor]);
-                if(visited.find(neighbor) == visited.end())
-                {
-                    Q.push(neighbor);
-                    visited.insert(neighbor);
-                }
-            }   
+            }
         }
-        
+
+        // run bfs
+        visited.clear();
+        Q = queue<Node*>();
+
+        Q.push(node);
+        visited.insert(node);
+        while (Q.size()) {
+
+            Node* oldNode = Q.front(); Q.pop();
+
+            Node* newNode = oldNode_newNode_map[oldNode];
+            for (auto & neigh: oldNode->neighbors) {
+                newNode->neighbors.push_back(oldNode_newNode_map[neigh]);
+
+                bool notSeen = (visited.find(neigh) == visited.end());
+                if (notSeen) {
+                    Q.push(neigh);
+                    visited.insert(neigh);
+                }
+            }
+        }
+
         return oldNode_newNode_map[node];
-        
+
+
         
     }
 };
