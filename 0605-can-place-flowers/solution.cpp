@@ -1,30 +1,28 @@
 class Solution {
 public:
     bool canPlaceFlowers(vector<int>& flowerbed, int n) {
-
-        int canPlace = 0;
-        const int length = flowerbed.size();
-        
-        if(n == 0)
-            return true;
-        if(length < n)
-            return false;
-        
-        
-        vector<int> newBed = {0};
-        for(auto & item: flowerbed)
-            newBed.push_back(item);
-        newBed.push_back(0);
-        
-        for(int i = 1; i < length + 1;i++)
-        {
-            if(newBed[i-1] == 0 && newBed[i] == 0 && newBed[i+1] == 0)
-            {
-                newBed[i++] = 1;
-                canPlace++;
+        if (n == 0) return true;
+        if (n == 1 && flowerbed.size() == 1 && flowerbed[0] == 0) return true;
+        int numPlanted = 0;
+        for (int i = 0; i < flowerbed.size(); ++i) {
+            if (i == 0 && i + 1 < flowerbed.size() && flowerbed[i] == 0 && flowerbed[i + 1] == 0) {
+                flowerbed[i] = 1;
+                numPlanted++;
+            } else if (i != 0 && i != flowerbed.size() - 1 
+                        && flowerbed[i] == 0
+                        && flowerbed[i - 1] == 0 
+                        && flowerbed[i+1] == 0) {
+                flowerbed[i] = 1;
+                numPlanted++;
+            } else if (i == flowerbed.size() - 1 && i - 1 >= 0 && flowerbed[i] == 0 && 
+                flowerbed[i - 1] == 0) {
+                flowerbed[i] = 1;
+                numPlanted++;
             }
+
+            if (numPlanted == n) return true;
         }
-        
-        return (canPlace >= n);
+
+        return false;
     }
 };
