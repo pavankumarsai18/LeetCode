@@ -1,19 +1,29 @@
 class Solution:
-    def rotate(self, matrix):
+    def rotate(self, matrix: List[List[int]]) -> None:
         """
-        :type matrix: List[List[int]]
-        :rtype: void Do not return anything, modify matrix in-place instead.
+        Do not return anything, modify matrix in-place instead.
         """
-        n = len(matrix[0])
-        for i in range(n // 2 + n % 2):
-            for j in range(n // 2):
-                tmp = [0] * 4
-                row, col = i, j
-                # store 4 elements in tmp
-                for k in range(4):
-                    tmp[k] = matrix[row][col]
-                    row, col = col, n - 1 - row
-                # rotate 4 elements
-                for k in range(4):
-                    matrix[row][col] = tmp[(k - 1) % 4]
-                    row, col = col, n - 1 - row
+        def transpose(matrix):
+            n = len(matrix)
+
+            for i in range(0, n):
+                bottom_left = (n-1, i)
+                top_right = (i, n-1)
+                while bottom_left != top_right:
+                    bottom_r, bottom_c = bottom_left
+                    top_r, top_c = top_right
+                    matrix[bottom_r][bottom_c], matrix[top_r][top_c] = matrix[top_r][top_c], matrix[bottom_r][bottom_c]
+
+                    bottom_left = (bottom_r - 1, bottom_c)
+                    top_right = (top_r, top_c - 1)
+                
+
+        def reverse(matrix):
+            for row in matrix:
+                for idx in range(0, len(row)//2):
+                    row[idx], row[len(row) - idx - 1] = row[len(row) - idx - 1], row[idx]
+        
+
+        transpose(matrix)
+        reverse(matrix)
+        return
