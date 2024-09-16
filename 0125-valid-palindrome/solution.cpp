@@ -1,30 +1,25 @@
 class Solution {
 public:
     bool isPalindrome(string s) {
-        int left, right;
         const int n = s.size();
+        int left = 0, right = n - 1;
 
-        left = 0; right = n - 1;
-
-        while (left <= right) {
-            char lChar = tolower(s[left]);
-            char rChar = tolower(s[right]);
-            if (isalnum(lChar))
-            {
-                if (isalnum(rChar)) {
-                    if (rChar == lChar) {
-                        left++; right--;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    right--;
-                }
-            } else {
+        while (left < right) {
+            while (left < right && !isalnum(s[left])) {
                 left++;
-            }
-        }
+            } 
 
+            while (right > left && !isalnum(s[right])) {
+                right--;
+            }
+
+            if (tolower(s[left]) != tolower(s[right])) {
+                return false;
+            }
+            
+            left++;
+            right--;
+        }
         return true;
     }
 };
