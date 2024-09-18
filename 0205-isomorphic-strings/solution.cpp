@@ -1,8 +1,7 @@
 class Solution {
 public:
-    bool isIsomorphic(string s, string t) 
-    {
-        if(s.size() != t.size()) return false;
+    bool isIsomorphic(string s, string t) {
+                if(s.size() != t.size()) return false;
         const int n = s.size();
         unordered_map<char, char> STmap;
         unordered_map<char, char> TSmap;
