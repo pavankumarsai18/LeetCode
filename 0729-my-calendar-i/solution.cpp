@@ -1,34 +1,29 @@
-class MyCalendar 
-{
+class MyCalendar {
 private:
-    set<pair<int, int>> calendar;
+    set<pair<int, int>> meetings;
 public:
-    MyCalendar() 
-    {
+    MyCalendar() {
         
     }
     
-    bool book(int start, int end) 
-    {
-        const pair<int, int> event{start, end};
-        
-        // next Event
-        const auto nextEvent = calendar.lower_bound(event);
-        
-        
-        if(nextEvent != calendar.end() && nextEvent->first < end)
+    bool book(int start, int end) {
+        pair<int, int> newEvent = {start, end};
+
+        auto nextEvent = meetings.lower_bound(newEvent);
+
+        if (nextEvent != meetings.end() && nextEvent->first < end) {
             return false;
-        
-        if(nextEvent != calendar.begin())
-        {
+        } 
+
+        if (nextEvent != meetings.begin()) {
             const auto prevEvent = prev(nextEvent);
-            if(prevEvent->second > start)
+            if (prevEvent->second > start) {
                 return false;
+            }
         }
-        
-        calendar.insert(event);
+
+        meetings.insert(newEvent);
         return true;
-                
     }
 };
 
