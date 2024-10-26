@@ -9,35 +9,35 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
 class Solution {
 public:
-    vector<int> rightSideView(TreeNode* root) 
-    {
-        if(root == nullptr)
+    vector<int> rightSideView(TreeNode* root) {
+        if (root == nullptr) {
             return {};
-        vector<int> ans;
-        vector<TreeNode*> level;
-        
-        level.push_back(root);
-    
-        
-        while(!level.empty())
-        {
-            ans.push_back(level[level.size()-1]->val);
-            vector<TreeNode*> newLevel;
-            for(int i = 0; i < level.size(); i++)
-            {
-                TreeNode* node = level[i];
-                if(node->left)
-                    newLevel.push_back(node->left);
-                if(node->right)
-                    newLevel.push_back(node->right);
-            }
-            
-            level = newLevel;
         }
-        
+        vector<int> ans;
+        queue<TreeNode*> Q;
+
+        Q.push(root);
+        while (Q.size() != 0) {
+            queue<TreeNode*> nextLevel;
+            if (Q.back() != nullptr) {
+                ans.push_back(Q.back()->val);
+            }
+            while (Q.size() != 0) {
+                TreeNode* node = Q.front(); Q.pop();
+                if (node->left) {
+                    nextLevel.push(node->left);
+                }
+                if (node->right) {
+                    nextLevel.push(node->right);
+                }
+            }
+            Q = std::move(nextLevel);
+        }
+
         return ans;
-        
     }
 };
+
