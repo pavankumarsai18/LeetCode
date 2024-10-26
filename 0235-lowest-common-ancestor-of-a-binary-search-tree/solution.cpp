@@ -10,47 +10,57 @@
 
 class Solution {
 public:
-    bool find(TreeNode* root, TreeNode* target, vector<TreeNode*> & path)
-    {
-        if(root == nullptr) return false;
-        
-        if(root == target)
-        {
-            path.push_back(root);
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+    bool findNode(TreeNode* root, TreeNode* node, vector<TreeNode*> & ancestors) {
+        if (root == nullptr) {
+            return false;
+        }
+
+
+        ancestors.push_back(root);
+        if (root == node) {
             return true;
         }
-        
-        if(find(root->left, target, path) || find(root->right, target, path))
-        {
-            path.push_back(root);
-            return true;
+        if (node->val < root->val) {
+            bool foundLeft  = findNode(root->left, node, ancestors);
+            if (!foundLeft) {
+                ancestors.pop_back();
+            }
+            return foundLeft;
         }
-        
-        return false;
-        
-    }
-    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) 
-    {
-        vector<TreeNode*> pPath, qPath;
-        find(root, p, pPath);
-        find(root, q, qPath);
-        
-        
-        int pIndex, qIndex;
-        pIndex = pPath.size() - 1;
-        qIndex = qPath.size() - 1;
-        
-        // 2 6
-        // 8 6
-        
-        while(pIndex >= 0 && qIndex >= 0&& qPath[qIndex] == pPath[pIndex])
-        {
-            pIndex--;
-            qIndex--;
+
+        bool foundRight = findNode(root->right, node, ancestors);
+        if (!foundRight) {
+            ancestors.pop_back();
         }
-        
-        return pPath[pIndex+1];
-        
-        
+        return foundRight;
     }
+
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        vector<TreeNode*> pAncestors, qAncestors;
+        findNode(root, p, pAncestors);
+        findNode(root, q, qAncestors);
+
+        int p_idx = 0, q_idx = 0;
+        TreeNode* lca = nullptr;
+        while (p_idx < pAncestors.size() && q_idx < qAncestors.size() && pAncestors[p_idx] == qAncestors[q_idx]) {
+            lca = pAncestors[p_idx];
+            p_idx++;
+            q_idx++;
+        }
+
+        return lca;
+    }
+
 };
