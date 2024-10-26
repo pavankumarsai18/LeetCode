@@ -11,25 +11,24 @@
  */
 class Solution {
 public:
-    int kthSmallest(TreeNode* root, int k) 
-    {
+    int kthSmallest(TreeNode* root, int k) {
+        // Go as left as you can
+        // Go to parent
+        // Go right and as left as you can
+        // Go to parent
         stack<TreeNode*> S;
-        TreeNode* cur = root;
-        S.push(cur);
-        while(true)
-        {
-            while(cur)
-            {
-                S.push(cur);
-                cur=cur->left;
+        while (true) {
+            while (root != nullptr) {
+                S.push(root);
+                root = root->left;
             }
-            cur = S.top(); S.pop();
-            if(--k == 0) 
-                return cur->val;
-            cur = cur->right;
-            
+            root = S.top(); S.pop();
+            k--;
+            if (k == 0) {
+                return root->val;
+            }
+            root = root->right;
         }
-        return -1;
-        
+        return 0;
     }
 };
