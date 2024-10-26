@@ -9,15 +9,21 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
 class Solution {
 public:
-    bool isValidBST(TreeNode* root, TreeNode* min=nullptr, TreeNode* max=nullptr) 
-    {
-        if(!root) return true;
-        
-        if(min and root->val <= min->val) return false;
-        if(max and root->val >= max->val) return false;
-        
-        return isValidBST(root->left, min, root) and isValidBST(root->right, root, max);
+    bool helper(TreeNode* root, long long L, long long R) {
+        if (root == nullptr) return true;
+
+        if (L < root->val && root->val < R) {
+            return helper(root->left, L, root->val) && helper(root->right, root->val, R);
+        }
+
+        return false;
+    }
+    bool isValidBST(TreeNode* root) {
+        long long L = LLONG_MIN, R = LLONG_MAX;
+        return helper(root, L, R);
     }
 };
+
