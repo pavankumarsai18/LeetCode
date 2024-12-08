@@ -3,81 +3,49 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        ListNode* result = nullptr;
-        ListNode* curr_1 = l1;
-        ListNode*curr_2 = l2;
+        ListNode* dummy = new ListNode(-1);
+        ListNode* sum_list_ptr = dummy;
         
-        
-        int len_1 = 0;
-        int len_2 = 0;
-        while(curr_1 != nullptr)
-        {
-            len_1 ++;
-            curr_1 = curr_1->next;
-        }
-        while(curr_2 != nullptr)
-        {
-            len_2 ++;
-            curr_2 = curr_2->next;
-        }
-        
-        if(len_1 > len_2)
-        {
-            swap(l1, l2);
-        }
-        
-        // cout<<len_1<<" "<<len_2<<endl;
-        
-        curr_1 = l1;
-        curr_2 = l2;
-        // cout<<curr_1->val<<" "<<curr_2->val<<endl;
+        ListNode* l1_ptr = l1;
+        ListNode* l2_ptr = l2;
         
         int carry = 0;
-        
-        auto tail = curr_2;
-        while(curr_1 != nullptr || curr_2 != nullptr )
-        {
-            int temp = 0;
-            // cout<<temp<</endl;
+        while (l1_ptr || l2_ptr) {
             
-            if(curr_1 == nullptr && curr_2 != nullptr)
-                temp =  curr_2->val + carry;
-            else if(curr_1 != nullptr && curr_2 == nullptr)
-                temp =  curr_1->val + carry;
-            else if(curr_1 != nullptr && curr_2 != nullptr)
-                temp = curr_1->val + curr_2->val + carry;
-
-            if(temp >= 10)
-            {
-                temp -= 10;
-                carry = 1;
-            }
-            else
-            {
-                carry = 0;
+            int val1 = 0;
+            int val2 = 0;
+            
+            if (l1_ptr != nullptr) {
+                val1 = l1_ptr->val;
+                l1_ptr = l1_ptr->next;
             }
             
-            curr_2->val = temp;
-            if(curr_2 != nullptr)
-            {
-                tail = curr_2;
-                curr_2 = curr_2->next;
+            if (l2_ptr != nullptr) {
+                val2 = l2_ptr->val;
+                l2_ptr = l2_ptr->next;
             }
-            if(curr_1 != nullptr)
-                curr_1 = curr_1->next;
             
-        }
-        if(carry == 1)
-        {
-            tail->next = new ListNode(1);
+            int sum = val1 + val2 + carry;
+            carry = (sum/10);
+            int digit = sum % 10;
+            
+            sum_list_ptr->next = new ListNode(digit);
+            sum_list_ptr = sum_list_ptr->next;
         }
         
-        return l2;
+        if (carry) {
+            sum_list_ptr->next = new ListNode(carry);
+        }
+        
+        return dummy->next;
+    
     }
 };
