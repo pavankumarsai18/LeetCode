@@ -11,47 +11,22 @@
  */
 class Solution {
 public:
-    void prune(TreeNode* node, int & numOnes)
-    {
-        if(node == nullptr) return;
-        int numOnesLeft, numOnesRight;
-        numOnesLeft = numOnesRight = 0;
+    TreeNode* pruneTree(TreeNode* root) {
+        if (root == nullptr) {
+            return nullptr;
+        }
+        
+        if (root->left == nullptr && root->right == nullptr && root->val == 0) {
+            return nullptr;
+        }
+        
+        root->left  = pruneTree(root->left);
+        root->right = pruneTree(root->right);
+        
+        if (root->left == nullptr && root->right == nullptr && root->val == 0) {
+            return nullptr;
+        }
 
-        if(node->left)
-        {
-            prune(node->left, numOnesLeft);
-            
-            if(numOnesLeft == 0)
-            {
-                node->left = nullptr;
-            }
-        }
-        
-        if(node->right)
-        {
-            prune(node->right, numOnesRight);
-            
-            if(numOnesRight == 0)
-            {
-                node->right = 0;
-            }
-        }
-        
-        if(node->val == 1)
-            numOnes++;
-        
-        numOnes += numOnesLeft;
-        numOnes += numOnesRight;
-        
-        return;
-    }
-    TreeNode* pruneTree(TreeNode* root) 
-    {
-        TreeNode * dummy = new TreeNode(1, root, nullptr);
-        int numOnes = 0;
-        prune(dummy, numOnes);
-        
-        return dummy->left;
-        
+        return root;
     }
 };
