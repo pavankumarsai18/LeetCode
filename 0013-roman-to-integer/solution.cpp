@@ -1,32 +1,28 @@
 class Solution {
 public:
     int romanToInt(string s) {
+        unordered_map<char, int> roman_val = {{'I', 1},
+                                              {'V', 5},
+                                              {'X', 10},
+                                              {'L', 50},
+                                              {'C', 100},
+                                              {'D', 500},
+                                              {'M', 1000}};
         
-        unordered_map<char, int> Table;
-        
-        Table['I'] = 1;
-        Table['V'] = 5;
-        Table['X'] = 10;
-        Table['L'] = 50;
-        Table['C'] = 100;
-        Table['D'] = 500;
-        Table['M'] = 1000;
-        
-        int result = 0;
-        
-        for(int i = 0; i < s.size(); i++)
-        {
-            if(i+1 < s.size() && Table[s[i]] < Table[s[i+1]])
-            {
-                result += (Table[s[i+1]] - Table[s[i]]);
-                i++;
-            }
-            else
-            {
-                result += Table[s[i]];
-            }
+        int ans = 0;
+        int index = 0;
+        while (index < s.size()) {
+            if (index + 1 < s.size() 
+                    && roman_val[s[index + 1]] > roman_val[s[index]]) {
+                
+                ans += roman_val[s[index+1]] - roman_val[s[index]];
+                index += 2;
+            } else {
+                ans += roman_val[s[index]];
+                index++;
+            }        
         }
-        return result;
         
+        return ans;
     }
 };
