@@ -1,12 +1,12 @@
 class Solution {
 public:
     vector<int> countBits(int n) {
-        vector<int> ans(n+1, 0);
-
-        for (int num = 1; num <= n; ++num) {
-            ans[num] = ans[num>>1] + (num&1);
+        vector<int> num_bits (n+1, 0);
+        bool odd = true;
+        for (int number = 1; number <= n; ++number) {
+            num_bits[number] = num_bits[number >> 1] + odd;
+            odd = !odd;
         }
-
-        return ans;
+        return num_bits;
     }
 };
