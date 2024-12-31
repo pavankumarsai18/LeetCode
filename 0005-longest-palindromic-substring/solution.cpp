@@ -1,47 +1,27 @@
 class Solution {
 public:
-    void expandAroundCenter(string & s, int mid1, int mid2, int & L, int & R, int & maxLength)
-    {
-        if(mid1 >= s.size() || mid2 >= s.size())
-            return;
-        
-        int l, r;
-        l = mid1; r = mid2;
-        
-        while(l >= 0 && r <= s.size())
-        {
-            if(s[l] != s[r])
-            {
-                break;
-            }
-            l--; r++;
-
+    string expand(int center1, int center2, string & s) {
+        int left = center1;
+        int right = center2;
+        while (left >= 0 && right < s.size() && s[left] == s[right]) {
+            left--;
+            right++;
         }
-        int length = r-l-1;
-        if(length > maxLength)
-        {
-            maxLength = length;
-            L = l+1;
-            R = r-1;
-        }
-        
-        
-        return;
-            
+        return s.substr(left + 1, (right - left - 1));
     }
-    string longestPalindrome(string s) 
-    {
+    string longestPalindrome(string s) {
         string ans = "";
-        int L, R, maxLength;
-        L=R=maxLength = 0;
-        
-        for(int i = 0; i < s.size(); i++)
-        {
-            expandAroundCenter(s, i, i, L, R, maxLength);
-            if(i+1 < s.size() && s[i] == s[i+1])
-                expandAroundCenter(s, i, i+1, L, R, maxLength);
+        for (int i = 0; i < s.size(); ++i) {
+            string odd = expand(i, i, s);
+            if (odd.size() > ans.size()) {
+                ans = std::move(odd);
+            }
+
+            string even = expand(i, i+1, s);
+            if (even.size() > ans.size()) {
+                ans = std::move(even);
+            }
         }
-        
-        return s.substr(L, maxLength);
+        return ans;
     }
 };
