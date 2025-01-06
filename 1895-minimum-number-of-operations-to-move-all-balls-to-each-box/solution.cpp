@@ -1,36 +1,22 @@
 class Solution {
 public:
-    vector<int> minOperations(string boxes) 
-    {
-        const int size = boxes.size();
-        
-        int numOnesVisited,numOnes, prefix;
-        numOnesVisited = numOnes = prefix = 0;
-        
-        for(int i = 0; i < size; i++)
-        {
-            if(boxes[i] == '1')
-            {
-                numOnes++;
-                prefix += i;
-            }
-        }
-        
-        vector<int> ans(boxes.size(),0);
-        
-        for(int i = 0; i < size; i++)
-        {
-            ans[i] = prefix;
-            if(boxes[i] == '1')
-            {
-                numOnesVisited++;
-                numOnes--;
-            }
+    vector<int> minOperations(string boxes) {
+        int n = boxes.size();
+        vector<int> ans(n, 0);
+        int numLeft = 0, movesLeft = 0;
+        int numRight = 0, movesRight = 0;
+
+        for (int i = 0; i < n; ++i) {
+            ans[i] += movesLeft;
+            numLeft += boxes[i] - '0';
+            movesLeft += numLeft;
             
-            prefix += numOnesVisited;
-            prefix -= numOnes;
+            int j = n -1 - i;
+            ans[j] += movesRight;
+            numRight += boxes[j] - '0';
+            movesRight += numRight;
         }
-        
+
         return ans;
     }
 };
