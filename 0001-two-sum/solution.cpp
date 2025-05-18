@@ -1,14 +1,14 @@
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
-        unordered_map<int /*value*/, int /*index*/> seen;
+        unordered_map<int, int> num_index;
 
-        for (int i = 0; i < nums.size(); i++) {
-            int other = target - nums[i];
-            if (seen.find(other) != seen.end()) {
-                return {seen[other], i};
+        for (size_t i = 0; i < nums.size(); ++i) {
+            int complement = target - nums[i];
+            if (num_index.count(complement)) {
+                return {num_index[complement], (int)i};
             }
-            seen[nums[i]] = i;
+            num_index[nums[i]] = i;
         }
 
         return {};
